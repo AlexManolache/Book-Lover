@@ -59,7 +59,7 @@ def createBook(request):
         if form.is_valid():
             book = form.save(commit=False)
             book.host = request.user
-            book.save()
+            book.save()       
             return redirect('home')
     context = {'form': form}
     return render(request, 'bookapp/book_form.html', context)

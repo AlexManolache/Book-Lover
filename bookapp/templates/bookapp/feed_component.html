@@ -7,7 +7,7 @@
           <a href="{% url 'delete-book' book.id %}">Delete</a>
        {% endif %}
        
-        <a href="{% url 'user-profile' book.host.id %}"> @{{book.host}} </a>
+        <a href="user-profile/{{book.host.id}}">@{{book.host}} {{book.host.id}} </a>
         <h5>
           {{books.id}} - <a href="{% url 'books' book.id %}">{{book.name}}</a>
         </h5>

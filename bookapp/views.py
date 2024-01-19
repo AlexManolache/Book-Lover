@@ -57,7 +57,9 @@ def createBook(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            book.host = request.user
+            book.save()
             return redirect('home')
     context = {'form': form}
     return render(request, 'bookapp/book_form.html', context)

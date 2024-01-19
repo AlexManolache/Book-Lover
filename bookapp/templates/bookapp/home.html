@@ -3,22 +3,13 @@
 <style>
   .home-container {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 3fr 1fr;
   }
 </style>
 
 <div class="home-container">
   <div>
-    <h3>Books Topics</h3>
-    <hr />
-    <div>
-      <a href="{% url 'home' %}">All</a>
-    </div>
-    {% for topic in topics %}
-    <div>
-      <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-    </div>
-    {% endfor %}
+    {% include 'bookapp/books_topic_component.html' %}
   </div>
 
   <div>
@@ -26,24 +17,11 @@
     <a href="{% url 'create-book'  %}">Create Book</a>
 
     <div>
-      {% for book in books %}
-      <div>
-
-        {% if request.user == book.host or request.user.is_superuser %}
-          <a href="{% url 'update-book' book.id %}">Update</a>
-
-          <a href="{% url 'delete-book' book.id %}">Delete</a>
-       {% endif %}
-       
-        <span> @{{book.host}} </span>
-        <h5>
-          {{books.id}} - <a href="{% url 'books' book.id %}">{{book.name}}</a>
-        </h5>
-        <small> {{book.topic}} </small>
-        <hr />
-      </div>
-      {% endfor %}
+      {% include 'bookapp/feed_component.html' %}
     </div>
+  </div>
+  <div>
+    {% include 'bookapp/recent_activity_component.html' %}
   </div>
 </div>
 

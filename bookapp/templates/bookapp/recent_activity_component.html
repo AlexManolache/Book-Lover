@@ -1,0 +1,14 @@
+<h3>Recent activity</h3>
+    <hr>
+    {% for message in messagesBook %}
+      <div>
+        <small>@{{message.user}} &nbsp; {{message.created | timesince}} ago</small>
+        <br>
+        <small>Comments related to {{message.book}}</small>
+        <p>{{message}}...</p>
+        {% if request.user.is_authenticated and request.user == book.host or request.user.is_superuser %}
+        <a href="{% url 'delete-comment' message.id %}">Delete</a>
+        {% endif %}
+        <hr>
+      </div>
+    {% endfor %}

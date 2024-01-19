@@ -1,0 +1,17 @@
+{% for book in books %}
+      <div>
+
+        {% if request.user == book.host or request.user.is_superuser %}
+          <a href="{% url 'update-book' book.id %}">Update</a>
+
+          <a href="{% url 'delete-book' book.id %}">Delete</a>
+       {% endif %}
+       
+        <span> @{{book.host}} </span>
+        <h5>
+          {{books.id}} - <a href="{% url 'books' book.id %}">{{book.name}}</a>
+        </h5>
+        <small> {{book.topic}} </small>
+        <hr />
+      </div>
+      {% endfor %}

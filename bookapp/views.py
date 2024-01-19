@@ -16,11 +16,12 @@ from django.contrib.auth.forms import UserCreationForm
 def home(request):
     q= request.GET.get('q') if request.GET.get('q') != None else ''
 
+    messagesBook = Message.objects.filter(Q(book__topic__name__icontains=q))
     books = Book.objects.filter(Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q) | Q(host__username__icontains=q))
     topics = Topic.objects.all()
     filteredBooks = sorted(books, key=lambda book: book.name.upper())
     totalBooks = books.count()
-    context = {'books': filteredBooks, 'topics': topics, 'totalBooks': totalBooks}
+    context = {'books': filteredBooks, 'topics': topics, 'totalBooks': totalBooks, 'messagesBook': messagesBook}
     return render(request, 'bookapp/home.html', context)
 
 @login_required(login_url='login')

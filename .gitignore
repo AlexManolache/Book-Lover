@@ -1,0 +1,17 @@
+# .gitignore
+
+# Virtual Environment
+
+env/
+
+# Django
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+.DS_Store
+
+# Secret key
+.env

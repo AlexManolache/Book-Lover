@@ -1,0 +1,57 @@
+{% extends 'main.html' %} 
+
+{% block content %}
+
+<style>
+    .book-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+<div class="book-container">
+  <div>
+        <h1>{{book.name}}</h1>
+
+        <p>{{book.description}}</p>
+
+        <div class="comment-wrapper">
+            <h3>Comments</h3>
+            <hr>
+            {% for message in messagesBook %}
+                <div>
+                <small
+                    >@{{message.user}} &nbsp; {{message.created | timesince}} ago</small
+                >
+                <p>{{message.body}}</p>
+                {% if request.user.is_authenticated and request.user == message.user or request.user.is_superuser%}
+                    <span><a href="{% url 'delete-comment' message.id %}">Delete</a></span>
+                {% endif %}
+                <hr>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="comment-form">
+                <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Leave a comment" />
+                <input type="submit" value="Send" />
+                </form>
+            </div>
+        {% endif %}
+    </div> 
+    <div>
+        <h3>Members</h3>
+        <hr>
+        {% for member in members %}
+            <div>
+                <p>@{{member}}</p>
+            </div>
+            
+        {% endfor %}
+    </div> 
+</div>
+
+{% endblock content %}

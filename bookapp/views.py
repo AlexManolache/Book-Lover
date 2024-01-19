@@ -91,6 +91,13 @@ def deleteBook(request, pk):
     context = {'obj' : book}
     return render(request, 'bookapp/delete.html', context)
 
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    books = user.book_set.all()
+    topics = Topic.objects.all()
+    messagesBook = user.message_set.all()
+    context = {'user': user, 'books': books, 'topics': topics, 'messagesBook': messagesBook}
+    return render(request, 'bookapp/profile.html', context)
 
 def loginPage(request):
     page ='loginPage'

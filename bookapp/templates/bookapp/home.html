@@ -8,14 +8,20 @@
 </style>
 
 <div class="home-container">
-  <div>{% include 'bookapp/books_topic_component.html' %}</div>
+  <div class="container text-center">
+    <div class="grid text-center mx-auto p-2">
+      {% include 'bookapp/books_topic_component.html' %}
+    </div>
+  </div>
   <div class="grid text-center mx-auto p-2">
     <div class="card d-flex flex-row mb-3 justify-content-evenly">
       <div>
         <h5>{{totalBooks}} total books</h5>
       </div>
       <div>
-        <a href="{% url 'create-book'  %}" class="nav-link text-primary">Create Book</a>
+        <a href="{% url 'create-book'  %}" class="nav-link text-primary"
+          >Create Book</a
+        >
       </div>
     </div>
 

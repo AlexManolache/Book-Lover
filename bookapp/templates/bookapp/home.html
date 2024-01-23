@@ -8,21 +8,20 @@
 </style>
 
 <div class="home-container">
-  <div>
-    {% include 'bookapp/books_topic_component.html' %}
-  </div>
-
-  <div>
-    <h5>{{totalBooks}} total books</h5>
-    <a href="{% url 'create-book'  %}">Create Book</a>
-
-    <div>
-      {% include 'bookapp/feed_component.html' %}
+  <div>{% include 'bookapp/books_topic_component.html' %}</div>
+  <div class="grid text-center mx-auto p-2">
+    <div class="card d-flex flex-row mb-3 justify-content-evenly">
+      <div>
+        <h5>{{totalBooks}} total books</h5>
+      </div>
+      <div>
+        <a href="{% url 'create-book'  %}" class="nav-link text-primary">Create Book</a>
+      </div>
     </div>
+
+    <div>{% include 'bookapp/feed_component.html' %}</div>
   </div>
-  <div>
-    {% include 'bookapp/recent_activity_component.html' %}
-  </div>
+  <div>{% include 'bookapp/recent_activity_component.html' %}</div>
 </div>
 
 {% endblock content %}

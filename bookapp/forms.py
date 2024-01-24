@@ -1,9 +1,12 @@
-from django.forms import ModelForm
+from django import forms
+from .models import Book, Topic
 
-from .models import Book, Message
-
-class BookForm(ModelForm):
+class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ['topic', 'name', 'description']
         exclude = ['host', 'members']
+
+    topic = forms.ModelChoiceField(queryset=Topic.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}), label= 'Choose a topic')
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))

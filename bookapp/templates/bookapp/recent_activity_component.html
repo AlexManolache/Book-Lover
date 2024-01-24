@@ -11,7 +11,7 @@
         <div >
           <small class="d-flex hstack">Comments related to <a class="ms-1 navbar border-body link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url 'books' message.book.id %}">{{message.book}}</a></small>
         </div>
-        <p class="text-primary">{{message}}...</p>
+        <p class="text-custom-color">{{message}}...</p>
         {% if request.user.is_authenticated and request.user == book.host or request.user.is_superuser %}
           <a class="btn btn-warning" href="{% url 'delete-comment' message.id %}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">

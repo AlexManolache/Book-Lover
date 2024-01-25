@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import Book, Topic, Message
-from .forms import BookForm
+from .forms import BookForm, UserRegisterForm
 
 
 from django.contrib.auth.models import User
@@ -133,10 +133,10 @@ def logoutUser(request):
 
 def registerUser(request):
     page = 'registerPage'
-    userRegForm = UserCreationForm()
+    userRegForm = UserRegisterForm()
 
     if request.method == 'POST':
-        userRegForm = UserCreationForm(request.POST)
+        userRegForm = UserRegisterForm(request.POST)
         alreadyUser = User.objects.filter(Q(username__icontains = request.POST.get('username')))
       
         if userRegForm.is_valid and alreadyUser.count() == 0:

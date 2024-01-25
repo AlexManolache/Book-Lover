@@ -8,12 +8,22 @@
 </style>
 
 <div class="home-container">
-  <div>{% include 'bookapp/books_topic_component.html' %}</div>
+  <div class="container text-center">
+    <div class="grid text-center mx-auto p-2">
+      <div>{% include 'bookapp/books_topic_component.html' %}</div>
+    </div>
+  </div>
 
-  <div>
-    <h1>{{user.username}}</h1>
-    <p>{{user}}</p>
-    <h3>Related Subjects</h3>
+  <div class="grid text-center mx-auto p-2">
+    <div>
+      <h1>{{user.username}}</h1>
+    </div>
+    <div>
+      <p>{{user}}</p>
+    </div>
+    <div class="d-flex justify-content-start">
+      <h3>Related Books</h3>
+    </div>
     <div>{% include 'bookapp/feed_component.html' %}</div>
   </div>
   <div>

@@ -43,12 +43,16 @@
         </div>
 
         {% if request.user.is_authenticated %}
-            <div class="comment-form">
-                <form method="POST" action="">
-                {% csrf_token %}
-                <input type="text" name="body" placeholder="Leave a comment" />
-                <input type="submit" value="Send" />
-                </form>
+            <div class="col-4">
+                <div class="comment-form">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="hstack gap-1">
+                            <input type="text" name="body" placeholder="Leave a comment" class="form-control"/>
+                            <input type="submit" value="Send" class="btn btn-outline-secondary"/>
+                        </div>
+                    </form>
+                </div>
             </div>
         {% endif %}
     </div> 
@@ -57,7 +61,7 @@
         <hr>
         {% for member in members %}
             <div>
-                <p>@{{member}}</p>
+                <p><a href="{% url 'user-profile' member.id %}" class="nav-link">@{{member}}</a></p>
             </div>
             
         {% endfor %}

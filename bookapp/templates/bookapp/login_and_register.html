@@ -20,7 +20,7 @@
         <form method="POST" action="">
             {% csrf_token %}
             {{userRegForm.as_p}}
-            <input type="submit" value="Register"/>
+            <input type="submit" value="Register" class="btn btn-primary"/>
         </form>
        <div class="mt-1">
             <p>Already have an account? <a href="{% url 'login' %}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Login</a></p>

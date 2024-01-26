@@ -10,11 +10,14 @@ class BookForm(forms.ModelForm):
         fields = ['topic', 'name', 'description']
         exclude = ['host', 'members']
 
-    topic = forms.ModelChoiceField(queryset=Topic.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}), label= 'Choose a topic')
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super(BookForm, self).__init__(*args, **kwargs)
 
+        self.fields['topic'].widget.attrs['class']= 'form-control'
+        self.fields['name'].widget.attrs['class']= 'form-control'
+        self.fields['description'].widget.attrs['class']= 'form-control'
 
+        self.fields['topic'].label = 'Choose a topic'
 
 class UserRegisterForm(UserCreationForm):
     class Meta:

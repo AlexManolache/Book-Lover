@@ -163,3 +163,23 @@ def createTopic(request):
             messages.error(request, 'Cannot be empty')
     context = {'topicForm': topicForm}
     return render(request, 'bookapp/topic_form.html', context)
+
+
+@login_required(login_url='login')
+def deleteTopic(request):
+    if request.GET.get('q') == '':
+        return HttpResponse('Topic input is empty!')
+    else:
+        searchTopic = Topic.objects.filter(Q(name__icontains=request.GET.get('q')))
+        topics = Topic.objects.all()
+        for topic in topics:
+            if searchTopic:
+                if request.user == topic.host or request.user.is_superuser:
+                    topic.delete()
+                    print(searchTopic)
+                    messages.info(request, 'Topic deleted successfully!')
+                    return redirect('home')
+                else:
+                    return HttpResponse('This topic can be deleted by de creator or admin!')
+            else:
+                return HttpResponse('Topic not found')

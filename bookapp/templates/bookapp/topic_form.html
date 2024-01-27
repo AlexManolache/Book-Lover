@@ -1,0 +1,13 @@
+{% extends 'main.html' %} 
+
+{% block content %}
+
+    <div class="col-md-6 offset-md-3">
+        <form method="POST">
+            {% csrf_token %}
+            {{topicForm.as_p}}
+            <input type="submit" value="Create Topic" class="btn btn-primary"/>
+        </form>
+    </div>
+
+{% endblock content %}

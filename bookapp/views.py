@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import Book, Topic, Message
-from .forms import BookForm, UserRegisterForm
+from .forms import BookForm, UserRegisterForm, CreateTopic
 
 
 from django.contrib.auth.models import User
@@ -10,7 +10,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
 
 
 def home(request):
@@ -148,3 +147,17 @@ def registerUser(request):
             messages.error(request, 'An error occurred!')
     context = {'page': page, 'userRegForm': userRegForm}
     return render(request, 'bookapp/login_and_register.html', context )
+
+@login_required(login_url='login')
+def createTopic(request):
+    topicForm = CreateTopic()
+
+    if (request.method == 'POST'):
+        topicForm = CreateTopic(request.POST)
+        if topicForm.is_valid:
+            topicForm.save()
+            return redirect('create-book')
+        else:
+            messages.error(request, 'Cannot be empty')
+    context = {'topicForm': topicForm}
+    return render(request, 'bookapp/topic_form.html', context)

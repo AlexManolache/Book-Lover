@@ -155,7 +155,9 @@ def createTopic(request):
     if (request.method == 'POST'):
         topicForm = CreateTopic(request.POST)
         if topicForm.is_valid:
-            topicForm.save()
+            topic = topicForm.save(commit=False)
+            topic.host = request.user
+            topic.save()
             return redirect('create-book')
         else:
             messages.error(request, 'Cannot be empty')

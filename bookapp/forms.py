@@ -40,7 +40,8 @@ class UserRegisterForm(UserCreationForm):
 class CreateTopic(forms.ModelForm):
     class Meta:
         model = Topic
-        fields = '__all__'
+        fields = ['name', 'host']
+        exclude = ['host']
 
     def __init__(self, *args, **kwargs):
             super(CreateTopic, self).__init__(*args, **kwargs)

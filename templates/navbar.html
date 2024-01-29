@@ -13,6 +13,7 @@
 <div class="ms-3 d-inline-block">
   <p class="mt-3">Hello, @{{user.username}}</p>
   <a class="col-1 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url 'logout' %}">Logout</a>
+  <a class="col-1 ms-3 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url 'game' %}">Play Game</a>
   {% else %}
   <a class="col-1 ms-3 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url 'login' %}">Login</a>
   {% endif %}

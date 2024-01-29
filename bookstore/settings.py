@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookapp.apps.BookappConfig',
+    'backgammon.apps.BackgammonConfig',
 ]
 
 MIDDLEWARE = [

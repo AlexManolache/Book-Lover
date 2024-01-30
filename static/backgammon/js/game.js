@@ -12,7 +12,11 @@ const movePiece = () => {
   arrows.forEach((arrow) => {
     arrow.addEventListener("dragover", (event) => {
       arrow.classList.add("cover");
-      event.preventDefault();
+
+      // check collision between pieces and board margin
+      if (event.clientY > 295 && event.clientY < 716) {
+        event.preventDefault();
+      }
     });
 
     arrow.addEventListener("dragleave", () => {
@@ -24,9 +28,11 @@ const movePiece = () => {
       const draggedPiece = document.getElementById(pieceId);
 
       const targetArrow = event.target.closest(".arrow");
-      if (targetArrow) {
+
+      // check if one seat is empty or at most one seat is occupied
+      if (targetArrow.children.length <=1) {
         const rect = targetArrow.getBoundingClientRect();
-       
+
         const offsetX = event.clientX - rect.left;
         const offsetY = event.clientY - rect.top;
 
@@ -36,6 +42,7 @@ const movePiece = () => {
         draggedPiece.classList.add("centered");
 
         targetArrow.appendChild(draggedPiece);
+        console.log("ccc");
 
         draggedPiece.classList.remove("active");
         targetArrow.classList.remove("cover");

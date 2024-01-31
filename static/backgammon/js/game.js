@@ -1,7 +1,8 @@
-const pieces = document.querySelectorAll(".pieces");
+const whitePieces = document.querySelectorAll(".white_pieces");
+const blackPieces = document.querySelectorAll(".black_pieces");
 const arrows = document.querySelectorAll(".arrow");
 
-const movePiece = () => {
+const movePieces = (pieces) => {
   pieces.forEach((piece) => {
     piece.addEventListener("dragstart", (event) => {
       event.dataTransfer.setData("text/plain", piece.id);
@@ -17,6 +18,11 @@ const movePiece = () => {
       if (event.clientY > 295 && event.clientY < 716) {
         event.preventDefault();
       }
+
+      // change cursor mode to not allowed
+      if (arrow.children.length > 1) {
+        event.dataTransfer.dropEffect = "none";
+      }
     });
 
     arrow.addEventListener("dragleave", () => {
@@ -30,7 +36,8 @@ const movePiece = () => {
       const targetArrow = event.target.closest(".arrow");
 
       // check if one seat is empty or at most one seat is occupied
-      if (targetArrow.children.length <=1) {
+      if (targetArrow.children.length <= 1) {
+
         const rect = targetArrow.getBoundingClientRect();
 
         const offsetX = event.clientX - rect.left;
@@ -42,13 +49,13 @@ const movePiece = () => {
         draggedPiece.classList.add("centered");
 
         targetArrow.appendChild(draggedPiece);
-        console.log("ccc");
 
         draggedPiece.classList.remove("active");
-        targetArrow.classList.remove("cover");
       }
+      targetArrow.classList.remove("cover");
     });
   });
 };
 
-movePiece();
+movePieces(whitePieces);
+movePieces(blackPieces);

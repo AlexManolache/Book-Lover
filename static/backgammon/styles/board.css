@@ -409,9 +409,6 @@
   z-index: 1;
 }
 
-.active {
-  opacity: 0.3;
-}
 
 .centered {
   transform: translate(-50%, -50%);

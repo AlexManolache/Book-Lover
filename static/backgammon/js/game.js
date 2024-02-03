@@ -2,22 +2,24 @@ const whitePieces = document.querySelectorAll(".white_pieces");
 const blackPieces = document.querySelectorAll(".black_pieces");
 const arrows = document.querySelectorAll(".arrow");
 
-let numb;
+const middleBar = document.querySelectorAll(".middle-bar");
 
-// no of Pieces from one arrow
-const numberPieces = (arrow) => {
-  return arrow.children.length;
-};
+let draggedPiece;
+
+const outPieces = [];
+let isOut = false;
 
 const movePieces = (pieces) => {
   pieces.forEach((piece) => {
     piece.addEventListener("dragstart", (event) => {
       event.dataTransfer.setData("text/plain", piece.id);
+      event.target.classList.add("active");
+      draggedPiece = piece;
     });
   });
-
   arrows.forEach((arrow) => {
     arrow.addEventListener("dragover", (event) => {
+      const targetArrow = event.target.closest(".arrow");
       arrow.classList.add("cover");
 
       // check collision between pieces and board margin
@@ -25,107 +27,76 @@ const movePieces = (pieces) => {
         event.preventDefault();
       }
 
-      // change cursor mode to not allowed
-      if (arrow.children.length > 1) {
+      const nr = numberPieces(targetArrow);
+
+      // maximul number of pieces on an arrow must be five
+      if (nr >= 5) {
         event.dataTransfer.dropEffect = "none";
       }
-    });
 
-    
-    numb = numberPieces(arrow);
+      // Check if arrow has one piece and which type is the second one
+      if (nr == 1) {
+        const isWhitePieces =
+          targetArrow.children[0].classList.contains("white_pieces");
+        const isBlackPieces =
+          targetArrow.children[0].classList.contains("black_pieces");
+
+        if (
+          (isWhitePieces && draggedPiece.classList.contains("black_pieces")) ||
+          (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
+        ) {
+          isOut = true;
+          targetArrow.children[0].style.backgroundColor = "blue";
+        }
+      }
+
+      // When on the arrow are at least two pieces, the third piece must has the same color as the first two
+
+      if (nr >= 2) {
+        const isWhitePieces =
+          targetArrow.children[0].classList.contains("white_pieces") &&
+          targetArrow.children[1].classList.contains("white_pieces");
+        const isBlackPieces =
+          targetArrow.children[0].classList.contains("black_pieces") &&
+          targetArrow.children[1].classList.contains("black_pieces");
+
+        if (
+          (isWhitePieces && draggedPiece.classList.contains("black_pieces")) ||
+          (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
+        ) {
+          event.dataTransfer.dropEffect = "none";
+        }
+      }
+    });
 
     arrow.addEventListener("dragleave", () => {
-      // -1 is subtracted from numberPieces to update the length of the previous arrow when the "dragleave" event occurs
-      numb -= 1;
-      if(numb === 0) {
-        arrow.classList.remove("has_white_pieces");
-        arrow.classList.remove("has_black_pieces");
-      }
       arrow.classList.remove("cover");
     });
-
     arrow.addEventListener("drop", (event) => {
       const pieceId = event.dataTransfer.getData("text/plain");
-      const draggedPiece = document.getElementById(pieceId);
-
+      draggedPiece = document.getElementById(pieceId);
       const targetArrow = event.target.closest(".arrow");
 
       const rect = targetArrow.getBoundingClientRect();
 
       const offsetX = event.clientX - rect.left;
       const offsetY = event.clientY - rect.top;
-
       draggedPiece.style.left = offsetX + targetArrow.offsetLeft + "px";
       draggedPiece.style.top = offsetY + targetArrow.offsetTop + "px";
-
       draggedPiece.classList.add("centered");
 
-      // check if targetArraw is empty, has white or black pieces to be appended corresponding pieces
-      const nameClass = checkTypePieces(targetArrow);
-
-      if (
-        nameClass == "" ||
-        nameClass == "has_white_pieces" ||
-        nameClass == "has_black_pieces"
-      ) {
-        targetArrow.appendChild(draggedPiece);
-        numb = numberPieces(targetArrow);
-      }
-
+      targetArrow.appendChild(draggedPiece);
+      console.log(isOut);
+      draggedPiece.classList.remove("active");
       targetArrow.classList.remove("cover");
+      isOut = false;
     });
   });
 };
 
-// check for empty arrows and based on color of the pieces, a class will be  added / removed for arrow
-// return name of the class which was added
-const checkTypePieces = (arrow) => {
-  const nPieces = numberPieces(arrow);
-  let nameClass = "";
-  if (nPieces == 0) {
-    arrow.classList.remove("has_white_pieces");
-    arrow.classList.remove("has_black_pieces");
-    nameClass = "";
-  } else if (
-    nPieces >= 2 &&
-    arrow.children[0].classList.contains("white_pieces") &&
-    arrow.children[1].classList.contains("black_pieces")
-  ) {
-    arrow.classList.remove("has_white_pieces");
-    arrow.classList.add("has_black_pieces");
-    nameClass = "has_black_pieces";
-  } else if (
-    nPieces >= 2 &&
-    arrow.children[0].classList.contains("black_pieces") &&
-    arrow.children[1].classList.contains("white_pieces")
-  ) {
-    arrow.classList.remove("has_black_pieces");
-    arrow.classList.add("has_white_pieces");
-    nameClass = "has_white_pieces";
-  } else if (
-    nPieces == 1 &&
-    arrow.children[0].classList.contains("white_pieces")
-  ) {
-    arrow.classList.add("has_white_pieces");
-    nameClass = "has_white_pieces";
-  } else if (
-    nPieces == 1 &&
-    arrow.children[0].classList.contains("black_pieces")
-  ) {
-    arrow.classList.add("has_black_pieces");
-    nameClass = "has_black_pieces";
-  }
-
-  // Additional check to remove the class when there are no children
-  if (
-    (arrow.children.length == 0 &&
-      arrow.classList.contains("has_white_pieces")) ||
-    arrow.classList.contains("has_black_pieces")
-  ) {
-    arrow.classList.remove("has_white_pieces");
-    arrow.classList.remove("has_black_pieces");
-  }
-  return nameClass;
+// no of Pieces from one arrow
+const numberPieces = (arrow) => {
+  return arrow.children.length;
 };
 
 movePieces(whitePieces);

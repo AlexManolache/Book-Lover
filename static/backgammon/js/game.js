@@ -71,7 +71,7 @@ const movePieces = (pieces) => {
     arrow.addEventListener("dragleave", () => {
       arrow.classList.remove("cover");
     });
-    arrow.addEventListener("drop", async (event) => {
+    arrow.addEventListener("drop", (event) => {
       const pieceId = event.dataTransfer.getData("text/plain");
       draggedPiece = document.getElementById(pieceId);
       const targetArrow = event.target.closest(".arrow");

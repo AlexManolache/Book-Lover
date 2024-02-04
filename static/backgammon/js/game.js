@@ -71,7 +71,7 @@ const movePieces = (pieces) => {
     arrow.addEventListener("dragleave", () => {
       arrow.classList.remove("cover");
     });
-    arrow.addEventListener("drop", (event) => {
+    arrow.addEventListener("drop", async (event) => {
       const pieceId = event.dataTransfer.getData("text/plain");
       draggedPiece = document.getElementById(pieceId);
       const targetArrow = event.target.closest(".arrow");
@@ -88,30 +88,38 @@ const movePieces = (pieces) => {
 
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
       if (isOut == true) {
+
         barPiece = targetArrow.children[0];
         outPieces.push(barPiece);
-        console.log(outPieces.length);
-        bar.addEventListener("dragover", (event) => {
-          event.preventDefault();
-          bar.classList.add("cover");
-        });
-        bar.addEventListener("drop", (event) => {
-          const targetBar = event.target.closest(".middle-bar");
-          const rectBar = targetBar.getBoundingClientRect();
-          const offsetX = event.clientX - rectBar.left;
-          const offsetY = event.clientY - rectBar.top;
-          barPiece.style.left = offsetX + "px";
-          barPiece.style.top = offsetY + "px";
-          barPiece.classList.add("centered");
-          targetBar.appendChild(barPiece);
-          bar.classList.remove("cover");
-        });
+        barPiece.classList.add("move");
+      
+        movePieceToBar(barPiece, event);
       }
       draggedPiece.classList.remove("active");
       targetArrow.classList.remove("cover");
       isOut = false;
     });
   });
+};
+// set position and transition on X and add outPieces on bar from left areas of the table
+const movePieceToBar = (outPiece, event) => {
+  const rectBar = bar.getBoundingClientRect();
+
+  const offsetX = event.clientX;
+
+  const distance = offsetX - rectBar.left;
+
+  outPiece.style.left = distance + "px";
+
+  const transXvalue = Math.abs(distance);
+
+  outPiece.classList.add("centered");
+  bar.appendChild(outPiece);
+
+  outPiece.style.setProperty(
+    "--translateX-value",
+    `${transXvalue}px`
+  );
 };
 
 // no of Pieces from one arrow

@@ -410,7 +410,6 @@
   z-index: 1;
 }
 
-
 .centered {
   transform: translate(-50%, -50%);
   left: 50%;
@@ -489,39 +488,56 @@
 }
 
 .left_dice {
-    animation: rotate_left_dice 1s forwards;
+  animation: rotate_left_dice 1s forwards;
 }
 
 .right_dice {
-    animation: rotate_right_dice 1s forwards;
+  animation: rotate_right_dice 1s forwards;
+}
+
+/* animation for pieces which are moving on the bar */
+:root {
+  --translateX-value: 280px;
+}
+
+.move {
+  animation: move_piece 1s forwards;
+}
+
+@keyframes move_piece {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(var(--translateX-value));
+  }
 }
 
 @keyframes rotate_left_dice {
-    0% {
-        transform: rotateX(0deg) translateY(0px);
+  0% {
+    transform: rotateX(0deg) translateY(0px);
+  }
 
-    }
+  50% {
+    transform: rotateX(-50deg) translateY(-50px);
+  }
 
-    50% {
-        transform:  rotateX(-50deg) translateY(-50px);
-    }
-
-    100% {
-        transform: rotateX(-360deg) translateX(-110px) translateY(-20px);
-    }
+  100% {
+    transform: rotateX(-360deg) translateX(-110px) translateY(-20px);
+  }
 }
 
 @keyframes rotate_right_dice {
-    0% {
-        transform: rotateX(0deg) translateY(0px);
+  0% {
+    transform: rotateX(0deg) translateY(0px);
+  }
 
-    }
+  50% {
+    transform: rotateX(50deg) translateY(-60px);
+  }
 
-    50% {
-        transform:  rotateX(50deg) translateY(-60px);
-    }
-
-    100% {
-        transform: rotateX(360deg) translateX(101px) translateY(-150px);
-    }
+  100% {
+    transform: rotateX(360deg) translateX(101px) translateY(-150px);
+  }
 }

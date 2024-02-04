@@ -93,6 +93,7 @@ const movePieces = (pieces) => {
         console.log(outPieces.length);
         bar.addEventListener("dragover", (event) => {
           event.preventDefault();
+          bar.classList.add("cover");
         });
         bar.addEventListener("drop", (event) => {
           const targetBar = event.target.closest(".middle-bar");
@@ -103,6 +104,7 @@ const movePieces = (pieces) => {
           barPiece.style.top = offsetY + "px";
           barPiece.classList.add("centered");
           targetBar.appendChild(barPiece);
+          bar.classList.remove("cover");
         });
       }
       draggedPiece.classList.remove("active");

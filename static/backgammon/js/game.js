@@ -2,7 +2,7 @@ const whitePieces = document.querySelectorAll(".white_pieces");
 const blackPieces = document.querySelectorAll(".black_pieces");
 const arrows = document.querySelectorAll(".arrow");
 
-const middleBar = document.querySelectorAll(".middle-bar");
+const bar = document.querySelector(".middle-bar");
 
 let draggedPiece;
 
@@ -46,7 +46,6 @@ const movePieces = (pieces) => {
           (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
         ) {
           isOut = true;
-          targetArrow.children[0].style.backgroundColor = "blue";
         }
       }
 
@@ -86,7 +85,26 @@ const movePieces = (pieces) => {
       draggedPiece.classList.add("centered");
 
       targetArrow.appendChild(draggedPiece);
-      console.log(isOut);
+
+      // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
+      if (isOut == true) {
+        barPiece = targetArrow.children[0];
+        outPieces.push(barPiece);
+        console.log(outPieces.length);
+        bar.addEventListener("dragover", (event) => {
+          event.preventDefault();
+        });
+        bar.addEventListener("drop", (event) => {
+          const targetBar = event.target.closest(".middle-bar");
+          const rectBar = targetBar.getBoundingClientRect();
+          const offsetX = event.clientX - rectBar.left;
+          const offsetY = event.clientY - rectBar.top;
+          barPiece.style.left = offsetX + "px";
+          barPiece.style.top = offsetY + "px";
+          barPiece.classList.add("centered");
+          targetBar.appendChild(barPiece);
+        });
+      }
       draggedPiece.classList.remove("active");
       targetArrow.classList.remove("cover");
       isOut = false;

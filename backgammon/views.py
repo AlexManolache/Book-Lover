@@ -1,8 +1,22 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+import random
+
 
 @login_required(login_url='login')
-def playGame(request):
+def showBoard(request):
+    number_dice_left = random.randint(1, 6)
+    number_dice_right = random.randint(1, 6)
+       
+    context = {'valLeftDice': number_dice_left, 'valRightDice': number_dice_right}
+    return render(request, 'backgammon/board.html', context)
 
-    return render(request, 'backgammon/board.html', {})
+@login_required(login_url='login')
+def getValue(request):
+    number_dice_left = random.randint(1, 6)
+    number_dice_right = random.randint(1, 6)
+       
+    context = {'valLeftDice': number_dice_left, 'valRightDice': number_dice_right}
+
+    return JsonResponse(context)

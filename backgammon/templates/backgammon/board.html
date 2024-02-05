@@ -1,5 +1,5 @@
 {% extends 'main.html' %} {% block content %}
-
+{% csrf_token %}
 <div class="d-flex justify-content-center flex-column align-items-center">
   <h1>Backgammon</h1>
   <div class="board">
@@ -140,9 +140,10 @@
     </div>
 
     <div class="dice">
-      <div class="left_dice">1</div>
-      <div class="right_dice">2</div>
+      {% include 'backgammon/dice.html' %}
     </div>
+
+
 
     <div class="middle-bar"></div>
 

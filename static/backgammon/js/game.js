@@ -12,6 +12,8 @@ let draggedPiece;
 const outPieces = [];
 let isOut = false;
 
+let valueDiece = [];
+
 const movePieces = (pieces) => {
   pieces.forEach((piece) => {
     piece.addEventListener("dragstart", (event) => {
@@ -130,22 +132,25 @@ const numberPieces = (arrow) => {
 const rollTheDices = () => {
   // in case of true, stop click events for dices
   // after one second this condition is checked and is being changed cursor to not-allowed
+  // cursor will become not allowed after dices are being stopped
   setTimeout(() => {
     if (
       leftDice.classList.contains("left_dice_roll") ||
       rightDice.classList.contains("right_dice_roll")
     ) {
+      console.log(valueDiece[0]);
+      console.log(valueDiece[1]);
+      leftDice.textContent = valueDiece[0];
+      rightDice.textContent = valueDiece[1];
       return;
     }
   }, 1000);
 
-  const leftOne = leftDice.classList.add("left_dice_roll");
-  const rightOne = rightDice.classList.add("right_dice_roll");
+  leftDice.classList.add("left_dice_roll");
+  rightDice.classList.add("right_dice_roll");
 
-  const fst = getNumber();
+  console.log("len " + valueDiece.length);
 
-  console.log(fst[0]);
-  console.log(fst[1]);
   setTimeout(() => {
     leftDice.classList.remove("left_dice_roll");
     rightDice.classList.remove("right_dice_roll");
@@ -158,16 +163,33 @@ const rollTheDices = () => {
   rightDice.classList.add("not_allowed");
 };
 
-// get number for each dice
-// return an array with two values
-const getNumber = () => {
-  const valLeftDice = Math.floor(Math.random() * 6) + 1;
-  const valRightDice = Math.floor(Math.random() * 6) + 1;
-  return [valLeftDice, valRightDice];
+// get value from backend for dices
+const getValueDice = () => {
+  fetch("get-dice-value/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": getCSRFToken(),
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      valueDiece[0] = data.valLeftDice;
+      valueDiece[1] = data.valRightDice;
+    })
+    .catch((err) => console.log(err));
 };
+
+const getCSRFToken = () => {
+  const csrfTokenInput = document.querySelector("[name=csrfmiddlewaretoken]");
+  return csrfTokenInput ? csrfTokenInput.value : "";
+};
+
+getValueDice();
 
 dice.addEventListener("click", (event) => {
   rollTheDices();
+  getValueDice();
 });
 
 movePieces(whitePieces);

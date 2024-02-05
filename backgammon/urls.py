@@ -4,5 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.playGame, name='game'),
+    path('', views.showBoard, name='game'),
+    path('get-dice-value/', views.getValue, name='getValue'),
 ]

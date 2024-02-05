@@ -129,12 +129,15 @@ const numberPieces = (arrow) => {
 // apply animation and get numbers for dices
 const rollTheDices = () => {
   // in case of true, stop click events for dices
-  if (
-    leftDice.classList.contains("left_dice_roll") ||
-    rightDice.classList.contains("right_dice_roll")
-  ) {
-    return;
-  }
+  // after one second this condition is checked and is being changed cursor to not-allowed
+  setTimeout(() => {
+    if (
+      leftDice.classList.contains("left_dice_roll") ||
+      rightDice.classList.contains("right_dice_roll")
+    ) {
+      return;
+    }
+  }, 1000);
 
   const leftOne = leftDice.classList.add("left_dice_roll");
   const rightOne = rightDice.classList.add("right_dice_roll");
@@ -149,6 +152,8 @@ const rollTheDices = () => {
     leftDice.classList.remove("not_allowed");
     rightDice.classList.remove("not_allowed");
   }, 3000);
+
+  // this class is applied after one second
   leftDice.classList.add("not_allowed");
   rightDice.classList.add("not_allowed");
 };

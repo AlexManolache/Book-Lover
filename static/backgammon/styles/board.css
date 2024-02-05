@@ -487,12 +487,16 @@
   border: 1px solid #ddd;
 }
 
-.left_dice {
+.left_dice_roll {
   animation: rotate_left_dice 1s forwards;
 }
 
-.right_dice {
+.right_dice_roll {
   animation: rotate_right_dice 1s forwards;
+}
+
+.not_allowed:hover {
+  cursor: not-allowed;
 }
 
 /* animation for pieces which are moving on the bar */

@@ -4,6 +4,9 @@ const arrows = document.querySelectorAll(".arrow");
 
 const bar = document.querySelector(".middle-bar");
 
+const leftDice = document.querySelector(".left_dice");
+const rightDice = document.querySelector(".right_dice");
+const dice = leftDice.parentElement;
 let draggedPiece;
 
 const outPieces = [];
@@ -88,11 +91,10 @@ const movePieces = (pieces) => {
 
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
       if (isOut == true) {
-
         barPiece = targetArrow.children[0];
         outPieces.push(barPiece);
         barPiece.classList.add("move");
-      
+
         movePieceToBar(barPiece, event);
       }
       draggedPiece.classList.remove("active");
@@ -116,16 +118,52 @@ const movePieceToBar = (outPiece, event) => {
   outPiece.classList.add("centered");
   bar.appendChild(outPiece);
 
-  outPiece.style.setProperty(
-    "--translateX-value",
-    `${transXvalue}px`
-  );
+  outPiece.style.setProperty("--translateX-value", `${transXvalue}px`);
 };
 
 // no of Pieces from one arrow
 const numberPieces = (arrow) => {
   return arrow.children.length;
 };
+
+// apply animation and get numbers for dices
+const rollTheDices = () => {
+  // in case of true, stop click events for dices
+  if (
+    leftDice.classList.contains("left_dice_roll") ||
+    rightDice.classList.contains("right_dice_roll")
+  ) {
+    return;
+  }
+
+  const leftOne = leftDice.classList.add("left_dice_roll");
+  const rightOne = rightDice.classList.add("right_dice_roll");
+
+  const fst = getNumber();
+
+  console.log(fst[0]);
+  console.log(fst[1]);
+  setTimeout(() => {
+    leftDice.classList.remove("left_dice_roll");
+    rightDice.classList.remove("right_dice_roll");
+    leftDice.classList.remove("not_allowed");
+    rightDice.classList.remove("not_allowed");
+  }, 3000);
+  leftDice.classList.add("not_allowed");
+  rightDice.classList.add("not_allowed");
+};
+
+// get number for each dice
+// return an array with two values
+const getNumber = () => {
+  const valLeftDice = Math.floor(Math.random() * 6) + 1;
+  const valRightDice = Math.floor(Math.random() * 6) + 1;
+  return [valLeftDice, valRightDice];
+};
+
+dice.addEventListener("click", (event) => {
+  rollTheDices();
+});
 
 movePieces(whitePieces);
 movePieces(blackPieces);

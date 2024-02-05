@@ -138,8 +138,10 @@ const rollTheDices = () => {
       leftDice.classList.contains("left_dice_roll") ||
       rightDice.classList.contains("right_dice_roll")
     ) {
-      console.log(valueDiece[0]);
-      console.log(valueDiece[1]);
+      // this class is applied after one second
+      leftDice.classList.add("not_allowed");
+      rightDice.classList.add("not_allowed");
+
       leftDice.textContent = valueDiece[0];
       rightDice.textContent = valueDiece[1];
       return;
@@ -149,18 +151,12 @@ const rollTheDices = () => {
   leftDice.classList.add("left_dice_roll");
   rightDice.classList.add("right_dice_roll");
 
-  console.log("len " + valueDiece.length);
-
   setTimeout(() => {
     leftDice.classList.remove("left_dice_roll");
     rightDice.classList.remove("right_dice_roll");
     leftDice.classList.remove("not_allowed");
     rightDice.classList.remove("not_allowed");
   }, 3000);
-
-  // this class is applied after one second
-  leftDice.classList.add("not_allowed");
-  rightDice.classList.add("not_allowed");
 };
 
 // get value from backend for dices

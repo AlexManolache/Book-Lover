@@ -502,6 +502,7 @@
 /* animation for pieces which are moving on the bar */
 :root {
   --translateX-value: 280px;
+  --translateY-value: 0px;
 }
 
 .move {
@@ -510,11 +511,12 @@
 
 @keyframes move_piece {
   0% {
-    transform: translateX(0);
+    transform: translateX(0) translateY(0);
   }
 
   100% {
-    transform: translateX(var(--translateX-value));
+    transform: translateX(var(--translateX-value))
+      translateY(var(--translateY-value));
   }
 }
 

@@ -115,8 +115,17 @@ const movePieceToBar = (outPiece, event) => {
 
   outPiece.style.left = distance + "px";
 
-  const transXvalue = Math.abs(distance);
+  let transXvalue = Math.abs(distance);
+  
 
+
+
+  // if pieces is located in right side top or bottom
+  // change direction of animation
+  if(offsetX > rectBar.x) {
+    transXvalue = -distance;
+  }
+ 
   outPiece.classList.add("centered");
   bar.appendChild(outPiece);
 

@@ -111,19 +111,29 @@ const movePieceToBar = (outPiece, event) => {
 
   const offsetX = event.clientX;
 
-  const distance = offsetX - rectBar.left;
+  const offsetY = event.clientY;
 
-  outPiece.style.left = distance + "px";
-
-  let transXvalue = Math.abs(distance);
+  const horizontalDistance = offsetX - rectBar.left;
   
+  const middleBar = rectBar.y + rectBar.height / 2;
 
+  outPiece.style.left = horizontalDistance + "px";
 
-
+  let transXvalue = Math.abs(horizontalDistance);
+  console.log(middleBar);
+  
+  
   // if pieces is located in right side top or bottom
   // change direction of animation
   if(offsetX > rectBar.x) {
-    transXvalue = -distance;
+    transXvalue = -horizontalDistance;
+  }
+  // check where the piece is situated.
+  // here will be added motion
+  if (offsetY < middleBar) {
+    console.log("Piece is up");
+  } else {
+    console.log("Piece is down");
   }
  
   outPiece.classList.add("centered");

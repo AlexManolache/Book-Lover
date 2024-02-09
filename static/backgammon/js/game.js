@@ -117,12 +117,11 @@ const movePieceToBar = (outPiece, event) => {
 
   const middleBar = rectBar.y + rectBar.height / 2;
 
-  outPiece.style.left = horizontalDistance + "px";
-  outPiece.style.top = "100px";
+  // 9 px for adjustment
+  outPiece.style.left = horizontalDistance - 9 + "px";
 
   let transXvalue = Math.abs(horizontalDistance);
   let transYvalue;
-
 
   // if pieces is located in right side top or bottom
   // change direction of animation
@@ -130,13 +129,28 @@ const movePieceToBar = (outPiece, event) => {
     transXvalue = -horizontalDistance;
   }
 
+  // Pythagorean theorem
+  trajectory = Math.sqrt(
+    Math.pow(horizontalDistance, 2) + Math.pow(middleBar, 2)
+  );
+
   // vertical movement
   if (offsetY > middleBar) {
-    outPiece.style.top = "300px";
-    transYvalue = -100;
+    if (outPiece.classList.contains("white_pieces")) {
+      outPiece.style.top = "350px";
+    } else {
+      outPiece.style.top = "300px";
+    }
+    console.log("Down " + trajectory / 2);
+    transYvalue = -trajectory / 2;
   } else {
-    transYvalue = 200;
-    console.log("Up");
+    if (outPiece.classList.contains("white_pieces")) {
+      outPiece.style.top = "135px";
+    } else {
+      outPiece.style.top = "85px";
+    }
+    console.log("Up " + trajectory / 2);
+    transYvalue = trajectory / 2;
   }
 
   outPiece.classList.add("centered");

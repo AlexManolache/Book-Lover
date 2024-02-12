@@ -11,6 +11,7 @@ let draggedPiece;
 
 const outPieces = [];
 let isOut = false;
+let canMovePieces = false;
 
 let valueDiece = [];
 
@@ -92,10 +93,11 @@ const movePieces = (pieces) => {
       draggedPiece.classList.add("centered");
 
       targetArrow.appendChild(draggedPiece);
-
+      console.log(valueDiece[0] + " aa");
+      console.log(valueDiece[1] + " bb");
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
       if (isOut == true) {
-       const barPiece = targetArrow.children[0];
+        const barPiece = targetArrow.children[0];
         outPieces.push(barPiece);
         barPiece.classList.add("move");
 
@@ -198,7 +200,7 @@ const rollTheDices = () => {
 
 // get value from backend for dices
 const getValueDice = () => {
-  fetch("get-dice-value/", {
+  return fetch("get-dice-value/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -218,12 +220,17 @@ const getCSRFToken = () => {
   return csrfTokenInput ? csrfTokenInput.value : "";
 };
 
-getValueDice();
+const valuesDicesStored = () => {
+  return valueDiece;
+};
 
-dice.addEventListener("click", (event) => {
+dice.addEventListener("click", () => {
   rollTheDices();
-  getValueDice();
-});
+  getValueDice().then(() => valuesDicesStored());
 
-movePieces(whitePieces);
-movePieces(blackPieces);
+  canMovePieces = true;
+  if (canMovePieces == true) {
+    movePieces(whitePieces);
+    movePieces(blackPieces);
+  }
+});

@@ -52,6 +52,8 @@ const movePieces = (pieces) => {
         ) {
           isOut = true;
         }
+      } else {
+        isOut = false;
       }
 
       // When on the arrow are at least two pieces, the third piece must has the same color as the first two
@@ -93,7 +95,7 @@ const movePieces = (pieces) => {
 
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
       if (isOut == true) {
-        barPiece = targetArrow.children[0];
+       const barPiece = targetArrow.children[0];
         outPieces.push(barPiece);
         barPiece.classList.add("move");
 
@@ -141,7 +143,6 @@ const movePieceToBar = (outPiece, event) => {
     } else {
       outPiece.style.top = "300px";
     }
-    console.log("Down " + trajectory / 2);
     transYvalue = -trajectory / 2;
   } else {
     if (outPiece.classList.contains("white_pieces")) {
@@ -149,7 +150,6 @@ const movePieceToBar = (outPiece, event) => {
     } else {
       outPiece.style.top = "85px";
     }
-    console.log("Up " + trajectory / 2);
     transYvalue = trajectory / 2;
   }
 

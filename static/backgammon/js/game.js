@@ -77,6 +77,7 @@ const movePieces = (pieces) => {
     });
 
     arrow.addEventListener("dragleave", () => {
+      isOut = false;
       arrow.classList.remove("cover");
     });
     arrow.addEventListener("drop", (event) => {

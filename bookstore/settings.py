@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +44,8 @@ INSTALLED_APPS = [
     'bookapp.apps.BookappConfig',
     'backgammon.apps.BackgammonConfig',
 ]
+
+ASGI_APPLICATION = "bookstore.asgi.application"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

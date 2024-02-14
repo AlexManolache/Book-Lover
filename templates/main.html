@@ -23,14 +23,6 @@
       {% endfor %}
     </ul>
     {% endif %} {% block content %} {% endblock %}
-    <script>
-      let url = `ws://${window.location.host}/ws/socket-game/`;
-      const testMsg = new WebSocket(url);
-      testMsg.onmessage = function (e) {
-        let data = JSON.parse(e.data);
-        console.log("Data ", data);
-      };
-    </script>
     {% block scriptGame %}
    
     {% endblock %}

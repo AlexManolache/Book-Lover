@@ -274,6 +274,8 @@
   testMsg.onmessage = function (e) {
     let data = JSON.parse(e.data);
     console.log("Data ", data);
+    document.getElementById("lft_dice").textContent = data.number.valLeftDice;
+    document.getElementById("rgt_dice").textContent = data.number.valRightDice;
   };
 </script>
 <script src="{% static 'backgammon/js/game.js' %}"></script>

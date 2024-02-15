@@ -169,51 +169,77 @@ const numberPieces = (arrow) => {
 };
 
 // apply animation and get numbers for dices
-const rollTheDices = () => {
+const rollTheDices = async () => {
+  let url = `ws://${window.location.host}/ws/roll-dices/`;
+  const dicesValueSocket = new WebSocket(url);
   // in case of true, stop click events for dices
   // after one second this condition is checked and is being changed cursor to not-allowed
   // cursor will become not allowed after dices are being stopped
-  setTimeout(() => {
-    if (
-      leftDice.classList.contains("left_dice_roll") ||
-      rightDice.classList.contains("right_dice_roll")
-    ) {
-      // this class is applied after one second
-      leftDice.classList.add("not_allowed");
-      rightDice.classList.add("not_allowed");
+  dicesValueSocket.onopen = () => {
+    sendMesssage(dicesValueSocket);
+  };
+};
 
-      leftDice.textContent = valueDiece[0];
-      rightDice.textContent = valueDiece[1];
-      return;
-    }
-  }, 1000);
+const sendMesssage = (dicesValueSocket) => {
+  dicesValueSocket.onmessage = (e) => {
+    let data = JSON.parse(e.data)
+    setTimeout(() => {
+      if (
+        leftDice.classList.contains(data.cssClasses[0]) ||
+        rightDice.classList.contains(data.cssClasses[1])
+      ) {
+        // this class is applied after one second
+        leftDice.classList.add(data.cssClasses[2]);
+        rightDice.classList.add(data.cssClasses[2]);
 
-  leftDice.classList.add("left_dice_roll");
-  rightDice.classList.add("right_dice_roll");
+        leftDice.textContent = valueDiece[0];
+        rightDice.textContent = valueDiece[1];
+        dicesValueSocket.send(
+          JSON.stringify({ action: "addClass", class: "not_allowed" })
+        );
+        return;
+      }
+    }, 1000);
 
-  setTimeout(() => {
-    leftDice.classList.remove("left_dice_roll");
-    rightDice.classList.remove("right_dice_roll");
-    leftDice.classList.remove("not_allowed");
-    rightDice.classList.remove("not_allowed");
-  }, 3000);
+    leftDice.classList.add(data.cssClasses[0]);
+    rightDice.classList.add(data.cssClasses[1]);
+
+    dicesValueSocket.send(
+      JSON.stringify({ action: "addClass", class: "left_dice_roll" })
+    );
+    dicesValueSocket.send(
+      JSON.stringify({ action: "addClass", class: "right_dice_roll" })
+    );
+
+    setTimeout(() => {
+      leftDice.classList.remove(data.cssClasses[0]);
+      rightDice.classList.remove(data.cssClasses[1]);
+      leftDice.classList.remove(data.cssClasses[2]);
+      rightDice.classList.remove(data.cssClasses[2]);
+
+      dicesValueSocket.send(
+        JSON.stringify({ action: "removeClass", class: "left_dice_roll" })
+      );
+      dicesValueSocket.send(
+        JSON.stringify({ action: "removeClass", class: "right_dice_roll" })
+      );
+      dicesValueSocket.send(
+        JSON.stringify({ action: "removeClass", class: "not_allowed" })
+      );
+    }, 3000);
+  };
 };
 
 // get value from backend for dices
-const getValueDice = () => {
-  return fetch("get-dice-value/", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": getCSRFToken(),
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      valueDiece[0] = data.valLeftDice;
-      valueDiece[1] = data.valRightDice;
-    })
-    .catch((err) => console.log(err));
+const getValueDice = async () => {
+  let url = `ws://${window.location.host}/ws/get-dice-value/`;
+
+  const dicesValue = new WebSocket(url);
+  dicesValue.onmessage = (e) => {
+    let data = JSON.parse(e.data);
+    valueDiece[0] = data.number.valLeftDice;
+    valueDiece[1] = data.number.valRightDice;
+  };
 };
 
 const getCSRFToken = () => {
@@ -225,8 +251,8 @@ const valuesDicesStored = () => {
   return valueDiece;
 };
 
-dice.addEventListener("click", () => {
-  rollTheDices();
+dice.addEventListener("click", async () => {
+  await rollTheDices();
   getValueDice().then(() => valuesDicesStored());
 
   canMovePieces = true;

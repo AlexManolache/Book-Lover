@@ -1,6 +1,4 @@
-{% extends 'main.html' %} 
-{% load static %}
-{% block content %} {% csrf_token %}
+{% extends 'main.html' %} {% load static %} {% block content %} {% csrf_token %}
 <div class="d-flex justify-content-center flex-column align-items-center">
   <h1>Backgammon</h1>
   <div class="board">
@@ -268,15 +266,6 @@
   </div>
 </div>
 {% endblock content %} {% block scriptGame %}
-<script>
-  let url = `ws://${window.location.host}/ws/socket-game/`;
-  const testMsg = new WebSocket(url);
-  testMsg.onmessage = function (e) {
-    let data = JSON.parse(e.data);
-    console.log("Data ", data);
-    document.getElementById("lft_dice").textContent = data.number.valLeftDice;
-    document.getElementById("rgt_dice").textContent = data.number.valRightDice;
-  };
-</script>
+<script src="{% static 'backgammon/js/diceGame.js' %}"></script>
 <script src="{% static 'backgammon/js/game.js' %}"></script>
 {% endblock %}

@@ -172,15 +172,19 @@ const numberPieces = (arrow) => {
 const rollTheDices = async () => {
   let url = `ws://${window.location.host}/ws/roll-dices/`;
   const dicesValueSocket = new WebSocket(url);
-  // in case of true, stop click events for dices
-  // after one second this condition is checked and is being changed cursor to not-allowed
-  // cursor will become not allowed after dices are being stopped
+ 
   dicesValueSocket.onopen = () => {
     sendMesssage(dicesValueSocket);
   };
 };
 
 const sendMesssage = (dicesValueSocket) => {
+  /**
+   * 
+   * [0] - left_dice_roll
+   * [1] - right_dice_roll
+   * [2] - not_allowed
+   */
   dicesValueSocket.onmessage = (e) => {
     let data = JSON.parse(e.data)
     setTimeout(() => {

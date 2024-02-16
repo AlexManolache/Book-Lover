@@ -38,15 +38,7 @@ class DiceValueConsumer(WebsocketConsumer):
        
     def disconnect(self, close_code):
         self.connections.remove(self)
-    
-    # def add_class(self, class_name):
-    #     # print(f"{class_name} added")
-    #     pass
-
-    # def remove_class(self, class_name):
-    #     # print(f"{class_name} removed")
-    #     pass
-
+   
     def getValue(self):
         number_dice_left = random.randint(1, 6)
         number_dice_right = random.randint(1, 6)
@@ -57,7 +49,7 @@ class DiceValueConsumer(WebsocketConsumer):
         for connection in self.connections:
             connection.send(text_data=update_msg)
 
-class RollAnimation(WebsocketConsumer):
+class RollAnimationConsumer(WebsocketConsumer):
      connections = set()
      cssClass = []
      def connect(self):

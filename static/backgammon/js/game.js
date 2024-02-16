@@ -172,7 +172,7 @@ const numberPieces = (arrow) => {
 const rollTheDices = async () => {
   let url = `ws://${window.location.host}/ws/roll-dices/`;
   const dicesValueSocket = new WebSocket(url);
- 
+
   dicesValueSocket.onopen = () => {
     sendMesssage(dicesValueSocket);
   };
@@ -180,13 +180,13 @@ const rollTheDices = async () => {
 
 const sendMesssage = (dicesValueSocket) => {
   /**
-   * 
+   *
    * [0] - left_dice_roll
    * [1] - right_dice_roll
    * [2] - not_allowed
    */
   dicesValueSocket.onmessage = (e) => {
-    let data = JSON.parse(e.data)
+    let data = JSON.parse(e.data);
     setTimeout(() => {
       if (
         leftDice.classList.contains(data.cssClasses[0]) ||

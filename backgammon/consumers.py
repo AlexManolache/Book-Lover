@@ -39,11 +39,13 @@ class DiceValueConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         self.connections.remove(self)
     
-    def add_class(self, class_name):
-        print(f"{class_name} added")
+    # def add_class(self, class_name):
+    #     # print(f"{class_name} added")
+    #     pass
 
-    def remove_class(self, class_name):
-        print(f"{class_name} removed")
+    # def remove_class(self, class_name):
+    #     # print(f"{class_name} removed")
+    #     pass
 
     def getValue(self):
         number_dice_left = random.randint(1, 6)
@@ -57,47 +59,27 @@ class DiceValueConsumer(WebsocketConsumer):
 
 class RollAnimation(WebsocketConsumer):
      connections = set()
-
+     cssClass = []
      def connect(self):
         self.accept()
         self.connections.add(self)
         self.add_class()
-        self.remove_class()
 
      def disconnect(self, close_code):
         pass
 
      def receive(self, text_data):
         data = json.loads(text_data)
-        action = data.get('action')
-        class_name = data.get('class')
-
-        if action == 'addClass':
-            self.addClass(class_name)
-        elif action == 'removeClass':
-            self.removeClass(class_name)
-        else:
-            pass
-    
-     def addClass(self, class_name):
-         pass
-     
-     def removeClass(self, class_name):
-         pass
-     
+        if data['action'] == 'addClass':
+            class_name = data.get('class')
+            if class_name not in self.cssClass:
+                self.cssClass.append(class_name)
 
      def add_class(self):
         update_msg = json.dumps({
-        'type': 'added_css_classes',
-        'cssClasses': ['left_dice_roll', 'right_dice_roll', 'not_allowed']
+        'type': 'cssUtilityClass',
+       
+        'cssClasses': self.cssClass,
     })
-        for connection in self.connections:
-            connection.send(text_data=update_msg)
-
-     def remove_class(self):
-        update_msg = json.dumps({
-            'type': 'removed_css_classes',
-            'cssClasses': ['left_dice_roll', 'right_dice_roll', 'not_allowed']
-        })
         for connection in self.connections:
             connection.send(text_data=update_msg)

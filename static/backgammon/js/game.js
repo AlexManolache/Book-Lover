@@ -180,9 +180,9 @@ const rollTheDices = async () => {
 const sendMesssage = (dicesValueSocket) => {
   /**
    *
-   * [0] - left_dice_roll
-   * [1] - right_dice_roll
-   * [2] - not_allowed
+   * cssClasses[0] - left_dice_roll
+   * cssClasses[1] - right_dice_roll
+   * cssClasses[2] - not_allowed
    */
   dicesValueSocket.onmessage = (e) => {
     let data = JSON.parse(e.data);
@@ -236,6 +236,9 @@ const valuesDicesStored = () => {
   return valueDiece;
 };
 
+
+getValueDice();
+rollTheDices();
 dice.addEventListener("click", async () => {
   await rollTheDices();
   getValueDice().then(() => valuesDicesStored());

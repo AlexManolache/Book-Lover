@@ -51,7 +51,7 @@ class DiceValueConsumer(WebsocketConsumer):
 
 class RollAnimationConsumer(WebsocketConsumer):
      connections = set()
-     cssClass = []
+     cssClass = ['left_dice_roll', 'right_dice_roll', 'not_allowed']
      def connect(self):
         self.accept()
         self.connections.add(self)
@@ -61,15 +61,11 @@ class RollAnimationConsumer(WebsocketConsumer):
         pass
 
      def receive(self, text_data):
-        data = json.loads(text_data)
-        if data['action'] == 'addClass':
-            class_name = data.get('class')
-            if class_name not in self.cssClass:
-                self.cssClass.append(class_name)
+         pass
 
      def add_class(self):
         update_msg = json.dumps({
-        'type': 'cssUtilityClass',
+        'type': 'cssClassesDice',
        
         'cssClasses': self.cssClass,
     })

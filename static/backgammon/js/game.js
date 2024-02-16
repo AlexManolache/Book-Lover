@@ -94,8 +94,7 @@ const movePieces = (pieces) => {
       draggedPiece.classList.add("centered");
 
       targetArrow.appendChild(draggedPiece);
-      console.log(valueDiece[0] + " aa");
-      console.log(valueDiece[1] + " bb");
+  
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
       if (isOut == true) {
         const barPiece = targetArrow.children[0];
@@ -198,9 +197,6 @@ const sendMesssage = (dicesValueSocket) => {
 
         leftDice.textContent = valueDiece[0];
         rightDice.textContent = valueDiece[1];
-        dicesValueSocket.send(
-          JSON.stringify({ action: "addClass", class: "not_allowed" })
-        );
         return;
       }
     }, 1000);
@@ -208,12 +204,6 @@ const sendMesssage = (dicesValueSocket) => {
     leftDice.classList.add(data.cssClasses[0]);
     rightDice.classList.add(data.cssClasses[1]);
 
-    dicesValueSocket.send(
-      JSON.stringify({ action: "addClass", class: "left_dice_roll" })
-    );
-    dicesValueSocket.send(
-      JSON.stringify({ action: "addClass", class: "right_dice_roll" })
-    );
 
     setTimeout(() => {
       leftDice.classList.remove(data.cssClasses[0]);
@@ -221,15 +211,6 @@ const sendMesssage = (dicesValueSocket) => {
       leftDice.classList.remove(data.cssClasses[2]);
       rightDice.classList.remove(data.cssClasses[2]);
 
-      dicesValueSocket.send(
-        JSON.stringify({ action: "removeClass", class: "left_dice_roll" })
-      );
-      dicesValueSocket.send(
-        JSON.stringify({ action: "removeClass", class: "right_dice_roll" })
-      );
-      dicesValueSocket.send(
-        JSON.stringify({ action: "removeClass", class: "not_allowed" })
-      );
     }, 3000);
   };
 };

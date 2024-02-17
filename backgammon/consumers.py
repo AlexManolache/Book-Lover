@@ -74,15 +74,24 @@ class RollAnimationConsumer(WebsocketConsumer):
 
 
 class MovePiecesConsumer(WebsocketConsumer):
-     connections = set()
+    connections = set()
 
-     def connect(self):
-         self.accept()
-         self.connections.add(self)
+    def connect(self):
+        self.accept()
+        self.connections.add(self)
 
-     def disconnect(self, close_code):
-        pass
+    def disconnect(self, close_code):
+        self.connections.remove(self)
 
-     def receive(self, text_data):
-         data = json.loads(text_data)
-         print(data)
+    def receive(self, text_data):
+        piecesData = json.loads(text_data)
+        print(piecesData)
+        self.addPieces(piecesData)
+
+    def addPieces(self, piecesData):
+        update_pieces = json.dumps({
+            'content': piecesData,
+            'cssCenter': 'centered',
+        })
+        for connection in self.connections:
+            connection.send(text_data=update_pieces)

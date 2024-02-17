@@ -8,7 +8,7 @@ const leftDice = document.querySelector(".left_dice");
 const rightDice = document.querySelector(".right_dice");
 const dice = leftDice.parentElement;
 let draggedPiece;
-
+let targetArrow;
 const outPieces = [];
 let isOut = false;
 let canMovePieces = false;
@@ -18,105 +18,128 @@ let valueDiece = [];
 const movePieces = (pieces) => {
   let url = `ws://${window.location.host}/ws/move-pieces/`;
   const piecesSocket = new WebSocket(url);
-  piecesSocket.onopen = () => {
-    pieces.forEach((piece) => {
-      piece.addEventListener("dragstart", (event) => {
-        event.dataTransfer.setData("text/plain", piece.id);
-        event.target.classList.add("active");
-        draggedPiece = piece;
-      });
+  const sss = document.querySelector(".sss");
+  piecesSocket.onopen = () => {};
+  pieces.forEach((piece) => {
+    piece.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", piece.id);
+      event.target.classList.add("active");
+      draggedPiece = piece;
     });
-    arrows.forEach((arrow) => {
-      arrow.addEventListener("dragover", (event) => {
-        const targetArrow = event.target.closest(".arrow");
-        arrow.classList.add("cover");
-        // for test websocket endpoint
-        let data = JSON.stringify({ Status: "Received" });
-        piecesSocket.send(data);
+  });
+  arrows.forEach((arrow) => {
+    arrow.addEventListener("dragover", (event) => {
+      const targetArrow = event.target.closest(".arrow");
+      arrow.classList.add("cover");
+      // for test websocket endpoint
 
-        // check collision between pieces and board margin
-        if (event.clientY > 295 && event.clientY < 716) {
-          event.preventDefault();
+      // check collision between pieces and board margin
+      if (event.clientY > 295 && event.clientY < 716) {
+        event.preventDefault();
+      }
+
+      const nr = numberPieces(targetArrow);
+
+      // maximul number of pieces on an arrow must be five
+      if (nr >= 5) {
+        event.dataTransfer.dropEffect = "none";
+      }
+
+      // Check if arrow has one piece and which type is the second one
+      if (nr == 1) {
+        const isWhitePieces =
+          targetArrow.children[0].classList.contains("white_pieces");
+        const isBlackPieces =
+          targetArrow.children[0].classList.contains("black_pieces");
+
+        if (
+          (isWhitePieces && draggedPiece.classList.contains("black_pieces")) ||
+          (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
+        ) {
+          isOut = true;
         }
-
-        const nr = numberPieces(targetArrow);
-
-        // maximul number of pieces on an arrow must be five
-        if (nr >= 5) {
-          event.dataTransfer.dropEffect = "none";
-        }
-
-        // Check if arrow has one piece and which type is the second one
-        if (nr == 1) {
-          const isWhitePieces =
-            targetArrow.children[0].classList.contains("white_pieces");
-          const isBlackPieces =
-            targetArrow.children[0].classList.contains("black_pieces");
-
-          if (
-            (isWhitePieces &&
-              draggedPiece.classList.contains("black_pieces")) ||
-            (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
-          ) {
-            isOut = true;
-          }
-        } else {
-          isOut = false;
-        }
+      } else {
+        isOut = false;
+      }
 
       // When on the arrow are at least two pieces, the third piece must has the same color as the first two
 
-        if (nr >= 2) {
-          const isWhitePieces =
-            targetArrow.children[0].classList.contains("white_pieces") &&
-            targetArrow.children[1].classList.contains("white_pieces");
-          const isBlackPieces =
-            targetArrow.children[0].classList.contains("black_pieces") &&
-            targetArrow.children[1].classList.contains("black_pieces");
+      if (nr >= 2) {
+        const isWhitePieces =
+          targetArrow.children[0].classList.contains("white_pieces") &&
+          targetArrow.children[1].classList.contains("white_pieces");
+        const isBlackPieces =
+          targetArrow.children[0].classList.contains("black_pieces") &&
+          targetArrow.children[1].classList.contains("black_pieces");
 
-          if (
-            (isWhitePieces &&
-              draggedPiece.classList.contains("black_pieces")) ||
-            (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
-          ) {
-            event.dataTransfer.dropEffect = "none";
-          }
+        if (
+          (isWhitePieces && draggedPiece.classList.contains("black_pieces")) ||
+          (isBlackPieces && draggedPiece.classList.contains("white_pieces"))
+        ) {
+          event.dataTransfer.dropEffect = "none";
         }
-      });
-
-      arrow.addEventListener("dragleave", () => {
-        isOut = false;
-        arrow.classList.remove("cover");
-      });
-      arrow.addEventListener("drop", (event) => {
-        const pieceId = event.dataTransfer.getData("text/plain");
-        draggedPiece = document.getElementById(pieceId);
-        const targetArrow = event.target.closest(".arrow");
-
-        const rect = targetArrow.getBoundingClientRect();
-
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
-        draggedPiece.style.left = offsetX + targetArrow.offsetLeft + "px";
-        draggedPiece.style.top = offsetY + targetArrow.offsetTop + "px";
-        draggedPiece.classList.add("centered");
-
-        targetArrow.appendChild(draggedPiece);
-
-        // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
-        if (isOut == true) {
-          const barPiece = targetArrow.children[0];
-          outPieces.push(barPiece);
-          barPiece.classList.add("move");
-
-          movePieceToBar(barPiece, event);
-        }
-        draggedPiece.classList.remove("active");
-        targetArrow.classList.remove("cover");
-        isOut = false;
-      });
+      }
     });
-  };
+
+    arrow.addEventListener("dragleave", () => {
+      isOut = false;
+      arrow.classList.remove("cover");
+    });
+
+    arrow.addEventListener("drop", (event) => {
+      const pieceId = event.dataTransfer.getData("text/plain");
+      draggedPiece = document.getElementById(pieceId);
+      targetArrow = event.target.closest(".arrow");
+      // console.log(draggedPiece);
+      const rect = targetArrow.getBoundingClientRect();
+
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
+      draggedPiece.style.left = offsetX + targetArrow.offsetLeft + "px";
+      draggedPiece.style.top = offsetY + targetArrow.offsetTop + "px";
+      draggedPiece.classList.add("centered");
+      console.log("left " + draggedPiece.style.left);
+      console.log("top " + draggedPiece.style.top);
+      let dataPiece = JSON.stringify({
+        pieceId,
+        position: {
+          x: draggedPiece.style.left,
+          y: draggedPiece.style.top,
+        },
+        // targetArrow: targetArrow,
+      });
+      piecesSocket.send(dataPiece);
+
+      targetArrow.appendChild(draggedPiece);
+
+      //
+
+      // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
+      if (isOut == true) {
+        const barPiece = targetArrow.children[0];
+        outPieces.push(barPiece);
+        barPiece.classList.add("move");
+
+        movePieceToBar(barPiece, event);
+      }
+
+      draggedPiece.classList.remove("active");
+      targetArrow.classList.remove("cover");
+      isOut = false;
+    });
+  });
+  piecesSocket.addEventListener("message", (e) => {
+    let pieceDroped = JSON.parse(e.data);
+    let pcsId = pieceDroped.content.pieceId;
+    let pcsPosition = pieceDroped.content.position;
+    let draggedPiece = document.getElementById(pcsId);
+    let targetArrow = draggedPiece.closest(".arrow");
+    let stylePcs = pieceDroped.cssCenter;
+    draggedPiece.style.left = pcsPosition.x;
+    draggedPiece.style.top = pcsPosition.y;
+    draggedPiece.classList.add(stylePcs);
+    targetArrow.appendChild(draggedPiece);
+  });
 };
 // set position and transition on X and add outPieces on bar from left areas of the table
 const movePieceToBar = (outPiece, event) => {
@@ -234,9 +257,6 @@ const getValueDice = async () => {
       valueDiece[1] = data.number.valRightDice;
     };
   };
-  dicesValue.onclose = () => {
-    console.log("closed");
-  }
 };
 
 const getCSRFToken = () => {
@@ -250,6 +270,8 @@ const valuesDicesStored = () => {
 
 getValueDice();
 rollTheDices();
+movePieces(whitePieces);
+movePieces(blackPieces);
 dice.addEventListener("click", async () => {
   await rollTheDices();
   getValueDice().then(() => valuesDicesStored());

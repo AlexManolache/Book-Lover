@@ -90,7 +90,7 @@ const movePieces = (pieces) => {
       const pieceId = event.dataTransfer.getData("text/plain");
       draggedPiece = document.getElementById(pieceId);
       targetArrow = event.target.closest(".arrow");
-      // console.log(draggedPiece);
+
       const rect = targetArrow.getBoundingClientRect();
 
       const offsetX = event.clientX - rect.left;
@@ -98,20 +98,20 @@ const movePieces = (pieces) => {
       draggedPiece.style.left = offsetX + targetArrow.offsetLeft + "px";
       draggedPiece.style.top = offsetY + targetArrow.offsetTop + "px";
       draggedPiece.classList.add("centered");
-      console.log("left " + draggedPiece.style.left);
-      console.log("top " + draggedPiece.style.top);
+      // console.log("left " + draggedPiece.style.left);
+      // console.log("top " + draggedPiece.style.top);
       let dataPiece = JSON.stringify({
         pieceId,
         position: {
           x: draggedPiece.style.left,
           y: draggedPiece.style.top,
         },
-        // targetArrow: targetArrow,
+        newTarget: targetArrow.id,
       });
       piecesSocket.send(dataPiece);
 
       targetArrow.appendChild(draggedPiece);
-
+      console.log(targetArrow.id);
       //
 
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
@@ -133,12 +133,14 @@ const movePieces = (pieces) => {
     let pcsId = pieceDroped.content.pieceId;
     let pcsPosition = pieceDroped.content.position;
     let draggedPiece = document.getElementById(pcsId);
-    let targetArrow = draggedPiece.closest(".arrow");
+    let parentTargetId = pieceDroped.content.newTarget;
     let stylePcs = pieceDroped.cssCenter;
     draggedPiece.style.left = pcsPosition.x;
     draggedPiece.style.top = pcsPosition.y;
     draggedPiece.classList.add(stylePcs);
-    targetArrow.appendChild(draggedPiece);
+    let parentElement = document.getElementById(parentTargetId);
+    parentElement.appendChild(draggedPiece);
+    console.log(parentElement);
   });
 };
 // set position and transition on X and add outPieces on bar from left areas of the table

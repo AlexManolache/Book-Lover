@@ -71,3 +71,18 @@ class RollAnimationConsumer(WebsocketConsumer):
     })
         for connection in self.connections:
             connection.send(text_data=update_msg)
+
+
+class MovePiecesConsumer(WebsocketConsumer):
+     connections = set()
+
+     def connect(self):
+         self.accept()
+         self.connections.add(self)
+
+     def disconnect(self, close_code):
+        pass
+
+     def receive(self, text_data):
+         data = json.loads(text_data)
+         print(data)

@@ -18,7 +18,6 @@ let valueDiece = [];
 const movePieces = (pieces) => {
   let url = `ws://${window.location.host}/ws/move-pieces/`;
   const piecesSocket = new WebSocket(url);
-  const sss = document.querySelector(".sss");
   piecesSocket.onopen = () => {};
   pieces.forEach((piece) => {
     piece.addEventListener("dragstart", (event) => {
@@ -98,8 +97,7 @@ const movePieces = (pieces) => {
       draggedPiece.style.left = offsetX + targetArrow.offsetLeft + "px";
       draggedPiece.style.top = offsetY + targetArrow.offsetTop + "px";
       draggedPiece.classList.add("centered");
-      // console.log("left " + draggedPiece.style.left);
-      // console.log("top " + draggedPiece.style.top);
+   
       let dataPiece = JSON.stringify({
         pieceId,
         position: {
@@ -111,8 +109,6 @@ const movePieces = (pieces) => {
       piecesSocket.send(dataPiece);
 
       targetArrow.appendChild(draggedPiece);
-      console.log(targetArrow.id);
-      //
 
       // Adding pieces to array and adding to the bar, which have been out from arrows by the opposition
       if (isOut == true) {
@@ -140,7 +136,6 @@ const movePieces = (pieces) => {
     draggedPiece.classList.add(stylePcs);
     let parentElement = document.getElementById(parentTargetId);
     parentElement.appendChild(draggedPiece);
-    console.log(parentElement);
   });
 };
 // set position and transition on X and add outPieces on bar from left areas of the table

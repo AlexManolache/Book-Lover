@@ -95,3 +95,17 @@ class MovePiecesConsumer(WebsocketConsumer):
         })
         for connection in self.connections:
             connection.send(text_data=update_pieces)
+
+class MovePieceToBar(WebsocketConsumer):
+    connections = set()
+
+    def connect(self):
+        self.accept
+        self.connections.add(self)
+
+    def disconnect(self):
+        self.connections.remove(self)
+
+    def receive(self, text_data):
+        barPieces = json.loads(text_data)
+        print(barPieces)

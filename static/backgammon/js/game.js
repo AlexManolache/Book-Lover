@@ -140,6 +140,10 @@ const movePieces = (pieces) => {
 };
 // set position and transition on X and add outPieces on bar from left areas of the table
 const movePieceToBar = (outPiece, event) => {
+  
+  const url = `ws://${window.location.host}/ws/move-to-bar/`;
+  const barPieceSocket = new WebSocket(url)
+
   const rectBar = bar.getBoundingClientRect();
 
   const offsetX = event.clientX;

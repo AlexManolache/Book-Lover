@@ -1,0 +1,271 @@
+{% extends 'main.html' %} {% load static %} {% block content %} {% csrf_token %}
+<div class="d-flex justify-content-center flex-column align-items-center">
+  <h1>Backgammon</h1>
+  <div class="board">
+    <div class="left-bin">
+      <div class="top-row">
+        <div class="arrow-down odd arrow has_white_pieces" id="thirteenth">
+          <div
+            class="piece_white_1 white_pieces"
+            id="piece_white_1"
+            draggable="true"
+          >
+            1
+          </div>
+          <div
+            class="piece_white_2 white_pieces"
+            id="piece_white_2"
+            draggable="true"
+          >
+            2
+          </div>
+          <div
+            class="piece_white_3 white_pieces"
+            id="piece_white_3"
+            draggable="true"
+          >
+            3
+          </div>
+          <div
+            class="piece_white_4 white_pieces"
+            id="piece_white_4"
+            draggable="true"
+          >
+            4
+          </div>
+          <div
+            class="piece_white_5 white_pieces"
+            id="piece_white_5"
+            draggable="true"
+          >
+            5
+          </div>
+        </div>
+        <div class="arrow-down even arrow" id="twelfth"></div>
+        <div class="arrow-down odd arrow" id="eleventh"></div>
+        <div class="arrow-down even arrow" id="nineth"></div>
+        <div class="arrow-down odd arrow has_black_pieces" id="eighth">
+          <div
+            class="piece_black_8 black_pieces"
+            id="piece_black_8"
+            draggable="true"
+          >
+            8
+          </div>
+          <div
+            class="piece_black_9 black_pieces"
+            id="piece_black_9"
+            draggable="true"
+          >
+            9
+          </div>
+          <div
+            class="piece_black_10 black_pieces"
+            id="piece_black_10"
+            draggable="true"
+          >
+            10
+          </div>
+        </div>
+        <div class="arrow-down even arrow" id="seventh"></div>
+      </div>
+
+      <div class="bottom-row">
+        <div class="arrow-up odd arrow has_black_pieces" id="fourteenth">
+          <div
+            class="piece_black_1 black_pieces"
+            id="piece_black_1"
+            draggable="true"
+          >
+            1
+          </div>
+          <div
+            class="piece_black_2 black_pieces"
+            id="piece_black_2"
+            draggable="true"
+          >
+            2
+          </div>
+          <div
+            class="piece_black_3 black_pieces"
+            id="piece_black_3"
+            draggable="true"
+          >
+            3
+          </div>
+          <div
+            class="piece_black_4 black_pieces"
+            id="piece_black_4"
+            draggable="true"
+          >
+            4
+          </div>
+          <div
+            class="piece_black_5 black_pieces"
+            id="piece_black_5"
+            draggable="true"
+          >
+            5
+          </div>
+        </div>
+        <div class="arrow-up even arrow" id="fifteenth"></div>
+        <div class="arrow-up odd arrow" id="sixteenth"></div>
+        <div class="arrow-up even arrow" id="seventeenth"></div>
+        <div class="arrow-up odd arrow has_white_pieces" id="eighteenth">
+          <div
+            class="piece_white_13 white_pieces"
+            id="piece_white_13"
+            draggable="true"
+          >
+            13
+          </div>
+          <div
+            class="piece_white_14 white_pieces"
+            id="piece_white_14"
+            draggable="true"
+          >
+            14
+          </div>
+          <div
+            class="piece_white_15 white_pieces"
+            id="piece_white_15"
+            draggable="true"
+          >
+            15
+          </div>
+        </div>
+        <div class="arrow-up even arrow" id="nineteenth"></div>
+      </div>
+    </div>
+
+    <div class="dice">{% include 'backgammon/dice.html' %}</div>
+
+    <div class="middle-bar"></div>
+
+    <div class="right-bin">
+      <div class="top-row">
+        <div class="arrow-down odd arrow has_black_pieces" id="sixth">
+          <div
+            class="piece_black_11 black_pieces"
+            id="piece_black_11"
+            draggable="true"
+          >
+            11
+          </div>
+          <div
+            class="piece_black_12 black_pieces"
+            id="piece_black_12"
+            draggable="true"
+          >
+            12
+          </div>
+          <div
+            class="piece_black_13 black_pieces"
+            id="piece_black_13"
+            draggable="true"
+          >
+            13
+          </div>
+          <div
+            class="piece_black_14 black_pieces"
+            id="piece_black_14"
+            draggable="true"
+          >
+            14
+          </div>
+          <div
+            class="piece_black_15 black_pieces"
+            id="piece_black_15"
+            draggable="true"
+          >
+            15
+          </div>
+        </div>
+        <div class="arrow-down even arrow" id="fifth"></div>
+        <div class="arrow-down odd arrow" id="forth"></div>
+        <div class="arrow-down even arrow" id="third"></div>
+        <div class="arrow-down odd arrow" id="second"></div>
+        <div class="arrow-down even arrow has_white_pieces" id="first">
+          <div
+            class="piece_white_6 white_pieces"
+            id="piece_white_6"
+            draggable="true"
+          >
+            6
+          </div>
+          <div
+            class="piece_white_7 white_pieces"
+            id="piece_white_7"
+            draggable="true"
+          >
+            7
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-row">
+        <div class="arrow-up odd arrow has_white_pieces" id="twentieth">
+          <div
+            class="piece_white_8 white_pieces"
+            id="piece_white_8"
+            draggable="true"
+          >
+            8
+          </div>
+          <div
+            class="piece_white_9 white_pieces"
+            id="piece_white_9"
+            draggable="true"
+          >
+            9
+          </div>
+          <div
+            class="piece_white_10 white_pieces"
+            id="piece_white_10"
+            draggable="true"
+          >
+            10
+          </div>
+          <div
+            class="piece_white_11 white_pieces"
+            id="piece_white_11"
+            draggable="true"
+          >
+            11
+          </div>
+          <div
+            class="piece_white_12 white_pieces"
+            id="piece_white_12"
+            draggable="true"
+          >
+            12
+          </div>
+        </div>
+        <div class="arrow-up even arrow" id="twenty-first"></div>
+        <div class="arrow-up odd arrow" id="twenty-second"></div>
+        <div class="arrow-up even arrow" id="twenty-third"></div>
+        <div class="arrow-up odd arrow" id="twenty-fourth"></div>
+        <div class="arrow-up even arrow has_black_pieces" id="twenty-fifth">
+          <div
+            class="piece_black_6 black_pieces"
+            id="piece_black_6"
+            draggable="true"
+          >
+            6
+          </div>
+          <div
+            class="piece_black_7 black_pieces"
+            id="piece_black_7"
+            draggable="true"
+          >
+            7
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} {% block scriptGame %}
+<script src="{% static 'backgammon/js/diceGame.js' %}"></script>
+<script src="{% static 'backgammon/js/game.js' %}"></script>
+{% endblock %}

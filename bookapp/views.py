@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import Book, Topic, Message
-from .forms import BookForm
+from .forms import BookForm, UserRegisterForm, CreateTopic
 
 
 from django.contrib.auth.models import User
@@ -10,17 +10,17 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
 
 
 def home(request):
     q= request.GET.get('q') if request.GET.get('q') != None else ''
 
+    messagesBook = Message.objects.filter(Q(book__topic__name__icontains=q))
     books = Book.objects.filter(Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q) | Q(host__username__icontains=q))
     topics = Topic.objects.all()
     filteredBooks = sorted(books, key=lambda book: book.name.upper())
     totalBooks = books.count()
-    context = {'books': filteredBooks, 'topics': topics, 'totalBooks': totalBooks}
+    context = {'books': filteredBooks, 'topics': topics, 'totalBooks': totalBooks, 'messagesBook': messagesBook}
     return render(request, 'bookapp/home.html', context)
 
 @login_required(login_url='login')
@@ -56,7 +56,9 @@ def createBook(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            book.host = request.user
+            book.save()       
             return redirect('home')
     context = {'form': form}
     return render(request, 'bookapp/book_form.html', context)
@@ -90,6 +92,13 @@ def deleteBook(request, pk):
     context = {'obj' : book}
     return render(request, 'bookapp/delete.html', context)
 
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    books = user.book_set.all()
+    topics = Topic.objects.all()
+    messagesBook = user.message_set.all()
+    context = {'user': user, 'books': books, 'topics': topics, 'messagesBook': messagesBook}
+    return render(request, 'bookapp/profile.html', context)
 
 def loginPage(request):
     page ='loginPage'
@@ -123,10 +132,10 @@ def logoutUser(request):
 
 def registerUser(request):
     page = 'registerPage'
-    userRegForm = UserCreationForm()
+    userRegForm = UserRegisterForm()
 
     if request.method == 'POST':
-        userRegForm = UserCreationForm(request.POST)
+        userRegForm = UserRegisterForm(request.POST)
         alreadyUser = User.objects.filter(Q(username__icontains = request.POST.get('username')))
       
         if userRegForm.is_valid and alreadyUser.count() == 0:
@@ -138,3 +147,39 @@ def registerUser(request):
             messages.error(request, 'An error occurred!')
     context = {'page': page, 'userRegForm': userRegForm}
     return render(request, 'bookapp/login_and_register.html', context )
+
+@login_required(login_url='login')
+def createTopic(request):
+    topicForm = CreateTopic()
+
+    if (request.method == 'POST'):
+        topicForm = CreateTopic(request.POST)
+        if topicForm.is_valid:
+            topic = topicForm.save(commit=False)
+            topic.host = request.user
+            topic.save()
+            return redirect('create-book')
+        else:
+            messages.error(request, 'Cannot be empty')
+    context = {'topicForm': topicForm}
+    return render(request, 'bookapp/topic_form.html', context)
+
+
+@login_required(login_url='login')
+def deleteTopic(request):
+    if request.GET.get('q') == '':
+        return HttpResponse('Topic input is empty!')
+    else:
+        searchTopic = Topic.objects.filter(Q(name__icontains=request.GET.get('q')))
+        topics = Topic.objects.all()
+        for topic in topics:
+            if searchTopic:
+                if request.user == topic.host or request.user.is_superuser:
+                    topic.delete()
+                    print(searchTopic)
+                    messages.info(request, 'Topic deleted successfully!')
+                    return redirect('home')
+                else:
+                    return HttpResponse('This topic can be deleted by de creator or admin!')
+            else:
+                return HttpResponse('Topic not found')

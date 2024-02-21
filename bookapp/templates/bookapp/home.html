@@ -3,48 +3,35 @@
 <style>
   .home-container {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+
+  .text-custom-color {
+    color: #362727;
   }
 </style>
 
 <div class="home-container">
-  <div>
-    <h3>Books Topics</h3>
-    <hr />
-    <div>
-      <a href="{% url 'home' %}">All</a>
+  <div class="container text-center">
+    <div class="grid text-center mx-auto p-2">
+      {% include 'bookapp/books_topic_component.html' %}
     </div>
-    {% for topic in topics %}
-    <div>
-      <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-    </div>
-    {% endfor %}
   </div>
-
-  <div>
-    <h5>{{totalBooks}} total books</h5>
-    <a href="{% url 'create-book'  %}">Create Book</a>
-
-    <div>
-      {% for book in books %}
+  <div class="grid text-center mx-auto p-2">
+    <div class="card d-flex flex-row mb-3 justify-content-evenly" style="width: 30rem">
       <div>
-
-        {% if request.user == book.host or request.user.is_superuser %}
-          <a href="{% url 'update-book' book.id %}">Update</a>
-
-          <a href="{% url 'delete-book' book.id %}">Delete</a>
-       {% endif %}
-       
-        <span> @{{book.host}} </span>
-        <h5>
-          {{books.id}} - <a href="{% url 'books' book.id %}">{{book.name}}</a>
-        </h5>
-        <small> {{book.topic}} </small>
-        <hr />
+        <h5>{{totalBooks}} total books</h5>
       </div>
-      {% endfor %}
+      <div>
+        <a href="{% url 'create-book'  %}" class="nav-link text-primary"
+          >Create Book</a
+        >
+      </div>
     </div>
+
+    <div>{% include 'bookapp/feed_component.html' %}</div>
   </div>
+  <div>{% include 'bookapp/recent_activity_component.html' %}</div>
 </div>
 
 {% endblock content %}

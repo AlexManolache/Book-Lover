@@ -1,0 +1,34 @@
+{% extends 'main.html' %} {% block content %}
+
+<style>
+  .home-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+</style>
+
+<div class="home-container">
+  <div class="container text-center">
+    <div class="grid text-center mx-auto p-2">
+      <div>{% include 'bookapp/books_topic_component.html' %}</div>
+    </div>
+  </div>
+
+  <div class="grid text-center mx-auto p-2">
+    <div>
+      <h1>{{user.username}}</h1>
+    </div>
+    <div>
+      <p>{{user}}</p>
+    </div>
+    <div class="d-flex justify-content-start">
+      <h3>Related Books</h3>
+    </div>
+    <div>{% include 'bookapp/feed_component.html' %}</div>
+  </div>
+  <div>
+    <div>{% include 'bookapp/recent_activity_component.html' %}</div>
+  </div>
+</div>
+
+{% endblock content %}

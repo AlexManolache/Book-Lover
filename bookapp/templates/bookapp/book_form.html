@@ -2,10 +2,14 @@
 
 {% block content %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Submit" />
-    </form>
+    <div class="col-md-6 offset-md-3">
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Submit" class="btn btn-primary"/>
+        </form>
 
+        <p class="mt-1">Did not find your topic? <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url 'create-topic' %}">Create One</a></p>
+    
+    </div>
 {% endblock content %}

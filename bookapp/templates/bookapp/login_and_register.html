@@ -2,27 +2,29 @@
 
 {% block content %}
     {% if page == 'loginPage' %}
-        <div>
+        <div class="col-md-6 offset-md-3">
             <form method="POST" action="">
                 {% csrf_token %}
-                <label for="username">Username</label>
-                <input type="text" name="username" placeholder="Username" />
-                <label for="password">Password</label>
-                <input type="password" name="password" placeholder="Password" />
-                <input type="submit" value="Login"/>
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" placeholder="Username" class="form-control" />
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" placeholder="Password" class="form-control" />
+                <input type="submit" value="Login" class="mt-1 btn btn-primary"/>
             </form>
-            <p>Do not have an account?</p>
-            <a href="{% url 'register' %}">Register</a>
+            <div class="mt-1">
+                <p>Do not have an account? <a href="{% url 'register' %}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Register</a></p>
+            </div>
         </div>
     {% elif page == 'registerPage' %}   
-    <div>
+    <div class="col-md-6 offset-md-3">
         <form method="POST" action="">
             {% csrf_token %}
             {{userRegForm.as_p}}
-            <input type="submit" value="Register"/>
+            <input type="submit" value="Register" class="btn btn-primary"/>
         </form>
-        <p>Already have an account?</p>
-        <a href="{% url 'login' %}">Login</a>
+       <div class="mt-1">
+            <p>Already have an account? <a href="{% url 'login' %}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Login</a></p>
+       </div>
     </div>
     {% endif %}
 {% endblock content %}

@@ -1,0 +1,23 @@
+{% for book in books %}
+<div class="card" style="width: 30rem">
+  <div class="card-body">
+    <h5 class="card-title">
+      <a class="nav-link" href="{% url 'books' book.id %}">{{book.name}}</a>
+    </h5>
+    <h6 class="card-subtitle mb-2 text-body-secondary">
+      <a class="nav-link" href="user-profile/{{book.host.id}}">
+        @{{book.host}}
+      </a>
+    </h6>
+    <p class="card-text"><small> {{book.topic}} </small></p>
+    {% if request.user == book.host or request.user.is_superuser %}
+    <a href="{% url 'update-book' book.id %}" class="card-link btn btn-primary"
+      >Update</a
+    >
+    <a href="{% url 'delete-book' book.id %}" class="card-link btn btn-warning"
+      >Delete</a
+    >
+    {% endif %}
+  </div>
+</div>
+{% endfor %}

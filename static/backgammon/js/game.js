@@ -327,12 +327,11 @@ const getValueDice = async () => {
   let url = `ws://${window.location.host}/ws/get-dice-value/`;
 
   const dicesValue = new WebSocket(url);
-  dicesValue.onopen = () => {
-    dicesValue.onmessage = (e) => {
-      let data = JSON.parse(e.data);
-      valueDiece[0] = data.number.valLeftDice;
-      valueDiece[1] = data.number.valRightDice;
-    };
+  dicesValue.onopen = () => {};
+  dicesValue.onmessage = (e) => {
+    let data = JSON.parse(e.data);
+    valueDiece[0] = data.number.valLeftDice;
+    valueDiece[1] = data.number.valRightDice;
   };
 };
 

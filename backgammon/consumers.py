@@ -85,7 +85,6 @@ class MovePiecesConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         piecesData = json.loads(text_data)
-        print(piecesData)
         self.addPieces(piecesData)
 
     def addPieces(self, piecesData):
@@ -98,14 +97,31 @@ class MovePiecesConsumer(WebsocketConsumer):
 
 class MovePieceToBar(WebsocketConsumer):
     connections = set()
+    out = []
 
     def connect(self):
-        self.accept
+        self.accept()
         self.connections.add(self)
 
-    def disconnect(self):
+    def disconnect(self, close_code):
         self.connections.remove(self)
 
     def receive(self, text_data):
         barPieces = json.loads(text_data)
-        print(barPieces)
+        self.addOutPieces(barPieces)
+        if self.out.__contains__(barPieces['outPieceId']) == False:
+            self.out.append(barPieces['outPieceId'])
+
+    def addOutPieces(self, outPieces):
+        updated_bar = json.dumps({
+            'content': outPieces,
+            'cssClasses': {
+                'targetClass': 'white_pieces',
+                'cssCenterClass': 'centered',
+                'cssMove': 'move',
+            },
+            'outPcs': self.out,
+        })
+      
+        for connection in self.connections:
+            connection.send(text_data=updated_bar)

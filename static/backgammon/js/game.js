@@ -1,5 +1,4 @@
 const blackAndWhitePiece = document.querySelectorAll(".piece");
-// const blackPieces = document.querySelectorAll(".black_pieces");
 const arrows = document.querySelectorAll(".arrow");
 
 const bar = document.querySelector(".middle-bar");

@@ -75,7 +75,8 @@ class RollAnimationConsumer(WebsocketConsumer):
 
 class MovePiecesConsumer(WebsocketConsumer):
     connections = set()
-
+    # positive number means number of white pieces, 0 means empty and negative is for black pieces
+    boardArray = [2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2]
     def connect(self):
         self.accept()
         self.connections.add(self)
@@ -85,6 +86,7 @@ class MovePiecesConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         piecesData = json.loads(text_data)
+        indexBoardArray = int(piecesData['newTarget'])
         self.addPieces(piecesData)
 
     def addPieces(self, piecesData):

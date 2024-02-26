@@ -1,5 +1,5 @@
-const whitePieces = document.querySelectorAll(".white_pieces");
-const blackPieces = document.querySelectorAll(".black_pieces");
+const blackAndWhitePiece = document.querySelectorAll(".piece");
+// const blackPieces = document.querySelectorAll(".black_pieces");
 const arrows = document.querySelectorAll(".arrow");
 
 const bar = document.querySelector(".middle-bar");
@@ -108,6 +108,7 @@ const movePieces = (pieces) => {
           },
           newTarget: targetArrow.id,
         });
+
         piecesSocket.send(dataPiece);
 
         targetArrow.appendChild(draggedPiece);
@@ -346,8 +347,7 @@ const valuesDicesStored = () => {
 
 getValueDice();
 rollTheDices();
-movePieces(whitePieces);
-movePieces(blackPieces);
+movePieces(blackAndWhitePiece);
 
 movePieceToBar();
 
@@ -357,7 +357,6 @@ dice.addEventListener("click", async () => {
 
   canMovePieces = true;
   if (canMovePieces == true) {
-    movePieces(whitePieces);
-    movePieces(blackPieces);
+    movePieces(blackAndWhitePiece);
   }
 });

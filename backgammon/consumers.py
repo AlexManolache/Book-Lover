@@ -75,7 +75,8 @@ class RollAnimationConsumer(WebsocketConsumer):
 
 class MovePiecesConsumer(WebsocketConsumer):
     connections = set()
-
+    # positive number means number of white pieces, 0 means empty and negative is for black pieces
+    boardArray = [2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2]
     def connect(self):
         self.accept()
         self.connections.add(self)
@@ -85,6 +86,7 @@ class MovePiecesConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         piecesData = json.loads(text_data)
+        indexBoardArray = int(piecesData['newTargetId'])
         print(piecesData)
         self.addPieces(piecesData)
 
@@ -95,3 +97,34 @@ class MovePiecesConsumer(WebsocketConsumer):
         })
         for connection in self.connections:
             connection.send(text_data=update_pieces)
+
+class MovePieceToBar(WebsocketConsumer):
+    connections = set()
+    out = []
+
+    def connect(self):
+        self.accept()
+        self.connections.add(self)
+
+    def disconnect(self, close_code):
+        self.connections.remove(self)
+
+    def receive(self, text_data):
+        barPieces = json.loads(text_data)
+        self.addOutPieces(barPieces)
+        if self.out.__contains__(barPieces['outPieceId']) == False:
+            self.out.append(barPieces['outPieceId'])
+
+    def addOutPieces(self, outPieces):
+        updated_bar = json.dumps({
+            'content': outPieces,
+            'cssClasses': {
+                'targetClass': 'white_pieces',
+                'cssCenterClass': 'centered',
+                'cssMove': 'move',
+            },
+            'outPcs': self.out,
+        })
+      
+        for connection in self.connections:
+            connection.send(text_data=updated_bar)

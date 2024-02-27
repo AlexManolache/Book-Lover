@@ -87,6 +87,16 @@ class MovePiecesConsumer(WebsocketConsumer):
     def receive(self, text_data):
         piecesData = json.loads(text_data)
         indexBoardArray = int(piecesData['newTargetId'])
+
+        if piecesData['draggedPieceWhite']:
+            print('White Piece moved only in DOM for now - test purpose')
+            print(piecesData['previousTargetId'])
+            print(piecesData['newTargetId'])
+        else:
+            print('Black Piece moved only in DOM for now - test purpose')
+            print(piecesData['previousTargetId'])
+            print(piecesData['newTargetId'])
+
         self.addPieces(piecesData)
 
     def addPieces(self, piecesData):

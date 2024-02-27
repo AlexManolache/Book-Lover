@@ -105,6 +105,7 @@ const movePieces = (pieces) => {
 
         let dataPiece = JSON.stringify({
           pieceId,
+          draggedPieceWhite: draggedPiece.classList.contains('white_pieces'),
           position: {
             x: draggedPiece.style.left,
             y: draggedPiece.style.top,

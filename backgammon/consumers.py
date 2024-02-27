@@ -87,7 +87,6 @@ class MovePiecesConsumer(WebsocketConsumer):
     def receive(self, text_data):
         piecesData = json.loads(text_data)
         indexBoardArray = int(piecesData['newTargetId'])
-        print(piecesData)
         self.addPieces(piecesData)
 
     def addPieces(self, piecesData):

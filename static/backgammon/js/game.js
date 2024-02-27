@@ -7,6 +7,8 @@ const leftDice = document.querySelector(".left_dice");
 const rightDice = document.querySelector(".right_dice");
 const dice = leftDice.parentElement;
 let draggedPiece;
+
+let previousTargetArrowId;
 let targetArrow;
 
 let isOut = false;
@@ -29,7 +31,9 @@ const movePieces = (pieces) => {
       arrow.addEventListener("dragover", (event) => {
         const targetArrow = event.target.closest(".arrow");
         arrow.classList.add("cover");
-        // for test websocket endpoint
+
+        // store id of the target and send it to the backend for arrayBoard to decrease the number of the index position.
+        previousTargetArrowId = draggedPiece.parentElement.id;
 
         // check collision between pieces and board margin
         if (event.clientY > 295 && event.clientY < 716) {
@@ -105,7 +109,8 @@ const movePieces = (pieces) => {
             x: draggedPiece.style.left,
             y: draggedPiece.style.top,
           },
-          newTarget: targetArrow.id,
+          newTargetId: targetArrow.id,
+          previousTargetId: previousTargetArrowId,
         });
 
         piecesSocket.send(dataPiece);
@@ -131,7 +136,7 @@ const movePieces = (pieces) => {
     let pcsId = pieceDroped.content.pieceId;
     let pcsPosition = pieceDroped.content.position;
     let draggedPiece = document.getElementById(pcsId);
-    let parentTargetId = pieceDroped.content.newTarget;
+    let parentTargetId = pieceDroped.content.newTargetId;
     let stylePcs = pieceDroped.cssCenter;
     draggedPiece.style.left = pcsPosition.x;
     draggedPiece.style.top = pcsPosition.y;
